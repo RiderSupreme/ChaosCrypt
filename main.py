@@ -174,8 +174,8 @@ ENCRYPT_TEMPLATE = '''
                 <textarea name="message" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label>Initial Seed (between 0 and 1):</label>
-                <input type="number" name="seed" step="0.000000001" min="0" max="1" required>
+                <label>Initial Seed (any real number):</label>
+                <input type="number" name="seed" step="any" required>
             </div>
             <div class="button-group">
                 <button type="submit" class="button primary">Encrypt</button>
@@ -292,8 +292,8 @@ DECRYPT_TEMPLATE = '''
                 <textarea name="encrypted" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label>Initial Seed (between 0 and 1):</label>
-                <input type="number" name="seed" step="0.000000001" min="0" max="1" required>
+                <label>Initial Seed (any real number):</label>
+                <input type="number" name="seed" step="any" required>
             </div>
             <div class="button-group">
                 <button type="submit" class="button primary">Decrypt</button>
