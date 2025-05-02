@@ -84,7 +84,7 @@ HTML_TEMPLATE = '''
 </head>
 <body>
     <div class="container">
-        <h1>Chaos-Based Encryption/Decryption</h1>
+        <h1>Chaos-Based Cryptography</h1>
         
         <div class="form-group">
             <form method="POST" action="/encrypt">
