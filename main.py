@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template_string, request, redirect, url_for
 
 app = Flask(__name__)
@@ -135,7 +134,7 @@ ENCRYPT_TEMPLATE = '''
             </div>
             <div class="form-group">
                 <label>Initial Seed (between 0 and 1):</label>
-                <input type="number" name="seed" step="0.000001" min="0" max="1" required>
+                <input type="number" name="seed" step="0.000000001" min="0" max="1" required>
             </div>
             <button type="submit" class="button">Encrypt</button>
             <a href="/" class="button">Back to Home</a>
@@ -210,7 +209,7 @@ DECRYPT_TEMPLATE = '''
             </div>
             <div class="form-group">
                 <label>Initial Seed (between 0 and 1):</label>
-                <input type="number" name="seed" step="0.000001" min="0" max="1" required>
+                <input type="number" name="seed" step="0.000000001" min="0" max="1" required>
             </div>
             <button type="submit" class="button">Decrypt</button>
             <a href="/" class="button">Back to Home</a>
