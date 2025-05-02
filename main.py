@@ -24,8 +24,8 @@ def decrypt(encrypted, x0):
 
 # --- Demonstration ---
 
-# Input message and initial seed (shared secret)
-original_message = "DubaiCosmos"
+# Get message from user input and set initial seed
+original_message = input("Enter your message to encrypt: ")
 x0 = 0.123456  # Initial value (x⁰), must be kept secret between sender and receiver
 
 # Encrypt the message
