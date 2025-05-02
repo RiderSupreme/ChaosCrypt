@@ -82,45 +82,86 @@ ENCRYPT_TEMPLATE = '''
     <title>Encryption - Chaos-Based Cryptography</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         .container {
             background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 0 auto;
         }
-        h1 { color: #333; text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 500;
+        }
         textarea, input[type="number"] {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        textarea:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
         }
         .button {
-            background-color: #4CAF50;
+            flex: 1;
+            background-color: #3498db;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            margin: 5px;
+            text-align: center;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .button:hover { background-color: #45a049; }
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        .button.primary {
+            background-color: #2ecc71;
+        }
+        .button.secondary {
+            background-color: #7f8c8d;
+        }
         .result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #2ecc71;
+        }
+        .result h3 {
+            color: #2c3e50;
+            margin-top: 0;
         }
     </style>
 </head>
@@ -136,8 +177,10 @@ ENCRYPT_TEMPLATE = '''
                 <label>Initial Seed (between 0 and 1):</label>
                 <input type="number" name="seed" step="0.000000001" min="0" max="1" required>
             </div>
-            <button type="submit" class="button">Encrypt</button>
-            <a href="/" class="button">Back to Home</a>
+            <div class="button-group">
+                <button type="submit" class="button primary">Encrypt</button>
+                <a href="/" class="button secondary">Back to Home</a>
+            </div>
         </form>
         {% if result %}
         <div class="result">
@@ -157,45 +200,86 @@ DECRYPT_TEMPLATE = '''
     <title>Decryption - Chaos-Based Cryptography</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
-            background-color: #f5f5f5;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         .container {
             background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 0 auto;
         }
-        h1 { color: #333; text-align: center; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 500;
+        }
         textarea, input[type="number"] {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-bottom: 10px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        textarea:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
         }
         .button {
-            background-color: #4CAF50;
+            flex: 1;
+            background-color: #3498db;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            margin: 5px;
+            text-align: center;
+            font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .button:hover { background-color: #45a049; }
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        .button.primary {
+            background-color: #2ecc71;
+        }
+        .button.secondary {
+            background-color: #7f8c8d;
+        }
         .result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #2ecc71;
+        }
+        .result h3 {
+            color: #2c3e50;
+            margin-top: 0;
         }
     </style>
 </head>
@@ -211,8 +295,10 @@ DECRYPT_TEMPLATE = '''
                 <label>Initial Seed (between 0 and 1):</label>
                 <input type="number" name="seed" step="0.000000001" min="0" max="1" required>
             </div>
-            <button type="submit" class="button">Decrypt</button>
-            <a href="/" class="button">Back to Home</a>
+            <div class="button-group">
+                <button type="submit" class="button primary">Decrypt</button>
+                <a href="/" class="button secondary">Back to Home</a>
+            </div>
         </form>
         {% if result %}
         <div class="result">
