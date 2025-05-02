@@ -1,0 +1,61 @@
+<!-- home.html --><!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos Crypto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Chaos Crypto Tool</h2>
+        <a href="/encrypt" class="button">Encrypt</a>
+        <a href="/decrypt" class="button">Decrypt</a>
+    </div>
+</body>
+</html><!-- encrypt.html --><!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt Message</title>
+</head>
+<body>
+    <div class="container">
+        <h3>Encrypt Message</h3>
+        <form method="POST">
+            <label>Message:</label>
+            <textarea name="message" required></textarea>
+            <label>Seed (x0):</label>
+            <input type="text" name="seed" value="{{ seed }}" required>
+            <input type="submit" value="Encrypt">
+        </form>
+        {% if result %}
+            <p><strong>Encrypted Output:</strong></p>
+            <p>{{ result }}</p>
+        {% endif %}
+        <a href="/">Back</a>
+    </div>
+</body>
+</html><!-- decrypt.html --><!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt Message</title>
+</head>
+<body>
+    <div class="container">
+        <h3>Decrypt Message</h3>
+        <form method="POST">
+            <label>Encrypted List:</label>
+            <textarea name="encrypted" required></textarea>
+            <label>Seed (x0):</label>
+            <input type="text" name="seed" required>
+            <input type="submit" value="Decrypt">
+        </form>
+        {% if result %}
+            <p><strong>Decrypted Output:</strong></p>
+            <p>{{ result }}</p>
+        {% endif %}
+        <a href="/">Back</a>
+    </div>
+</body>
+</html>
