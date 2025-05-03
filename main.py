@@ -109,9 +109,10 @@ HOME_TEMPLATE = '''
     <html>
     <head>
         <title>Chaos Cryptography</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
-        <script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-16esztaSRplJROstbIXH3T/9ujwz7a6wyiGGN1CpAyQ/7bE5xw5QxtjMeqT+NFAza6yl9WaUzEiB+vAoqgw7ng==" crossorigin="anonymous"></script>
+        <script defer>
+            window.addEventListener('DOMContentLoaded', function() {
             function initializeAnimation() {
                 if (typeof THREE === 'undefined' || typeof gsap === 'undefined') {
                     console.error('Required libraries not loaded');
@@ -195,7 +196,7 @@ HOME_TEMPLATE = '''
                 }
             }
 
-            window.addEventListener('load', initializeAnimation);
+            });
         </script>
         <style>
             #animation-container {
