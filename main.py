@@ -485,13 +485,20 @@ ENCRYPT_TEMPLATE = '''
                 color: #eee; /* Light text */
             }
             .container {
-                background-color: #333; /* Darker container */
-                padding: 40px;
+                background-color: #333;
+                padding: 20px;
                 border-radius: 20px;
-                box-shadow: 0 10px 25px rgba(255,0,0,0.1); /* Red shadow */
+                box-shadow: 0 10px 25px rgba(255,0,0,0.1);
                 max-width: 700px;
+                width: 95%;
                 margin: 0 auto;
-                border: 1px solid #555; /* Dark border */
+                border: 1px solid #555;
+            }
+            @media (min-width: 768px) {
+                .container {
+                    padding: 40px;
+                    width: 90%;
+                }
             }
             h1 {
                 color: #ff4d4d; /* Red heading */
@@ -525,8 +532,16 @@ ENCRYPT_TEMPLATE = '''
             }
             .button-group {
                 display: flex;
-                gap: 15px;
-                margin-top: 30px;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 20px;
+            }
+            @media (min-width: 768px) {
+                .button-group {
+                    flex-direction: row;
+                    gap: 15px;
+                    margin-top: 30px;
+                }
             }
             .button {
                 flex: 1;
@@ -623,13 +638,20 @@ DECRYPT_TEMPLATE = '''
                 color: #eee; /* Light text */
             }
             .container {
-                background-color: #333; /* Darker container */
-                padding: 40px;
+                background-color: #333;
+                padding: 20px;
                 border-radius: 20px;
-                box-shadow: 0 10px 25px rgba(255,0,0,0.1); /* Red shadow */
+                box-shadow: 0 10px 25px rgba(255,0,0,0.1);
                 max-width: 700px;
+                width: 95%;
                 margin: 0 auto;
-                border: 1px solid #555; /* Dark border */
+                border: 1px solid #555;
+            }
+            @media (min-width: 768px) {
+                .container {
+                    padding: 40px;
+                    width: 90%;
+                }
             }
             h1 {
                 color: #ff4d4d; /* Red heading */
@@ -663,8 +685,16 @@ DECRYPT_TEMPLATE = '''
             }
             .button-group {
                 display: flex;
-                gap: 15px;
-                margin-top: 30px;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 20px;
+            }
+            @media (min-width: 768px) {
+                .button-group {
+                    flex-direction: row;
+                    gap: 15px;
+                    margin-top: 30px;
+                }
             }
             .button {
                 flex: 1;
