@@ -70,19 +70,19 @@ HOME_TEMPLATE = '''
             overflow-x: hidden;
             position: relative;
         }
-        
+
         #bgCanvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: 0;
         }
-        
+
         .hero {
             position: relative;
             z-index: 1;
         }
-        
+
         .animate-text, .animate-up {
             opacity: 0;
         }
@@ -178,6 +178,31 @@ HOME_TEMPLATE = '''
             color: #fff;
             border: 1px solid rgba(255,255,255,0.2);
         }
+            .hero-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                width: 100%;
+                max-width: 800px;
+                z-index: 2;
+            }
+            .glitch {
+                position: relative;
+
+        }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
     </style>
 </head>
 <body>
@@ -200,62 +225,6 @@ HOME_TEMPLATE = '''
                 <a href="/how-it-works" class="button secondary">Learn More</a>
             </div>
         </div>
-        <style>
-            .hero-content {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                text-align: center;
-                width: 100%;
-                max-width: 800px;
-                z-index: 2;
-            }
-            .glitch {
-                position: relative;
-                animation: glitch 1s linear infinite;
-            }
-            .glitch::before,
-            .glitch::after {
-                content: attr(data-text);
-                position: absolute;
-                left: 0;
-                text-shadow: 1px 0 blue;
-                width: 100%;
-                clip: rect(44px, 450px, 56px, 0);
-                animation: glitch-anim 2s linear infinite alternate-reverse;
-            }
-            .glitch::before {
-                left: 2px;
-                text-shadow: -2px 0 #ff3366;
-                top: -2px;
-            }
-            .glitch::after {
-                left: -2px;
-                text-shadow: 2px 0 #ff6b6b;
-                top: 2px;
-            }
-            @keyframes glitch-anim {
-                0% {
-                    clip: rect(42px, 450px, 44px, 0);
-                }
-                20% {
-                    clip: rect(12px, 450px, 14px, 0);
-                }
-                40% {
-                    clip: rect(62px, 450px, 64px, 0);
-                }
-                60% {
-                    clip: rect(82px, 450px, 84px, 0);
-                }
-                80% {
-                    clip: rect(32px, 450px, 34px, 0);
-                }
-                100% {
-                    clip: rect(92px, 450px, 94px, 0);
-                }
-            }
-        </style>
     </section>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
@@ -266,38 +235,38 @@ HOME_TEMPLATE = '''
             canvas: document.querySelector('#bgCanvas'),
             alpha: true
         });
-        
+
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
-        
+
         // Create particle system
         const particlesGeometry = new THREE.BufferGeometry();
         const particlesCount = 5000;
         const posArray = new Float32Array(particlesCount * 3);
-        
+
         for(let i = 0; i < particlesCount * 3; i++) {
             posArray[i] = (Math.random() - 0.5) * 5;
         }
-        
+
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
         const particlesMaterial = new THREE.PointsMaterial({
             size: 0.005,
             color: '#ff3366'
         });
-        
+
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
         camera.position.z = 2;
-        
+
         // Mouse movement effect
         let mouseX = 0;
         let mouseY = 0;
-        
+
         document.addEventListener('mousemove', (event) => {
             mouseX = event.clientX / window.innerWidth - 0.5;
             mouseY = event.clientY / window.innerHeight - 0.5;
         });
-        
+
         // Animation
         function animate() {
             requestAnimationFrame(animate);
@@ -307,7 +276,7 @@ HOME_TEMPLATE = '''
             renderer.render(scene, camera);
         }
         animate();
-        
+
         // GSAP Animations
         gsap.from('.animate-text', {
             duration: 1,
@@ -316,7 +285,7 @@ HOME_TEMPLATE = '''
             stagger: 0.2,
             ease: "power4.out"
         });
-        
+
         gsap.from('.animate-up', {
             duration: 1,
             y: 50,
@@ -324,7 +293,7 @@ HOME_TEMPLATE = '''
             delay: 0.8,
             ease: "power3.out"
         });
-        
+
         // Resize handler
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
