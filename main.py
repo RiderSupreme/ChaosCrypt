@@ -291,7 +291,7 @@ HOME_TEMPLATE = '''
             });
         </script>
         <nav class="nav">
-            <div class="logo">CHAOS CRYPT</div>
+            <div class="logo">CHAOSCRYPT</div>
             <div class="nav-links">
                 <a href="/encrypt">Encrypt</a>
                 <a href="/decrypt">Decrypt</a>
@@ -301,7 +301,7 @@ HOME_TEMPLATE = '''
 
         <section class="hero">
             <h1>Secure Your Data<br>With Chaos</h1>
-            <p>Experience military-grade encryption powered by chaos theory and advanced mathematics. Protect your messages with unprecedented security.</p>
+            <p>Experience military-grade encryption powered by chaos theory and advanced mathematics, while being backed with years of scientific rigour. Protect your messages with unprecedented security.</p>
             <div class="cta-buttons">
                 <a href="/encrypt" class="button primary">Start Encrypting</a>
                 <a href="/how-it-works" class="button secondary">Learn More</a>
