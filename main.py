@@ -111,6 +111,13 @@ HOME_TEMPLATE = '''
         <title>Chaos Cryptography</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+        <script>
+            window.addEventListener('load', () => {
+                if (typeof THREE === 'undefined' || typeof gsap === 'undefined') {
+                    location.reload();
+                }
+            });
+        </script>
         <style>
             #animation-container {
                 position: fixed;
@@ -259,12 +266,27 @@ HOME_TEMPLATE = '''
             scene.add(particlesMesh);
             camera.position.z = 3;
 
-            // Mouse movement effect
+            // Mouse and touch movement effect
             let mouseX = 0;
             let mouseY = 0;
+            
+            // Handle mouse events
             document.addEventListener('mousemove', (event) => {
                 mouseX = event.clientX / window.innerWidth - 0.5;
                 mouseY = event.clientY / window.innerHeight - 0.5;
+            });
+            
+            // Handle touch events
+            document.addEventListener('touchmove', (event) => {
+                event.preventDefault();
+                mouseX = event.touches[0].clientX / window.innerWidth - 0.5;
+                mouseY = event.touches[0].clientY / window.innerHeight - 0.5;
+            }, { passive: false });
+            
+            // Reset on touch end
+            document.addEventListener('touchend', () => {
+                mouseX = 0;
+                mouseY = 0;
             });
 
             // Animation loop
