@@ -56,10 +56,11 @@ HOME_TEMPLATE = '''
 <html>
 <head>
     <title>Chaos-Based Cryptography</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             background-color: #f5f5f5;
@@ -69,9 +70,12 @@ HOME_TEMPLATE = '''
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .operations {
             text-align: center;
         }
-        h1 { color: #333; }
+        h1, h2 { color: #333; }
         .button {
             display: inline-block;
             background-color: #4CAF50;
@@ -87,15 +91,125 @@ HOME_TEMPLATE = '''
         .button:hover {
             background-color: #d43d22;
         }
+        .explanation {
+            text-align: left;
+            padding: 20px;
+        }
+        .graph {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container operations">
         <h1>Chaos-Based Cryptography</h1>
         <h2>Choose Operation</h2>
         <a href="/encrypt" class="button">Encryption</a>
         <a href="/decrypt" class="button">Decryption</a>
     </div>
+
+    <div class="container explanation">
+        <h2>How Does It Work?</h2>
+        
+        <h3>1. The Logistic Map</h3>
+        <p>At the heart of our encryption system is the logistic map, a chaotic mathematical function:</p>
+        <div class="code-block">x_{n+1} = r * x_n * (1 - x_n)</div>
+        <p>Where:</p>
+        <ul>
+            <li>r ≈ 4 (we use 3.99999...)</li>
+            <li>x_n is a value between 0 and 1</li>
+        </ul>
+        <div id="logisticPlot" class="graph"></div>
+
+        <h3>2. Encryption Process</h3>
+        <p>The encryption process follows these steps:</p>
+        <ol>
+            <li>Each character in the input message is converted to its ASCII value</li>
+            <li>The logistic map generates a unique chaos value for each character</li>
+            <li>The chaos value is used to shift the ASCII value (modulo 256)</li>
+            <li>In double encryption mode, this process is repeated with a second seed</li>
+        </ol>
+
+        <h3>3. Security Features</h3>
+        <ul>
+            <li><strong>Sensitivity to Initial Conditions:</strong> Even a tiny change in the seed value produces completely different results</li>
+            <li><strong>Deterministic Chaos:</strong> The system is deterministic yet unpredictable without the correct seed</li>
+            <li><strong>Double Encryption Option:</strong> Adds an extra layer of security with a second chaotic sequence</li>
+        </ul>
+
+        <div id="sensitivityPlot" class="graph"></div>
+    </div>
+
+    <script>
+        // Generate logistic map plot
+        function generateLogisticData(x0, n) {
+            let x = x0;
+            const r = 3.99999999999999;
+            const xValues = [x];
+            const yValues = [];
+            
+            for(let i = 0; i < n; i++) {
+                const nextX = r * x * (1 - x);
+                xValues.push(nextX);
+                yValues.push(nextX);
+                x = nextX;
+            }
+            
+            return [xValues.slice(0, -1), yValues];
+        }
+
+        // Plot logistic map
+        const [x1, y1] = generateLogisticData(0.2, 100);
+        const trace1 = {
+            x: x1,
+            y: y1,
+            mode: 'markers',
+            name: 'x0 = 0.2',
+            marker: { size: 3 }
+        };
+
+        const layout1 = {
+            title: 'Logistic Map Behavior',
+            xaxis: { title: 'x_n' },
+            yaxis: { title: 'x_{n+1}' }
+        };
+
+        Plotly.newPlot('logisticPlot', [trace1], layout1);
+
+        // Plot sensitivity demonstration
+        const [x2, y2] = generateLogisticData(0.2, 50);
+        const [x3, y3] = generateLogisticData(0.201, 50);
+
+        const trace2 = {
+            y: y2,
+            mode: 'lines',
+            name: 'x0 = 0.2'
+        };
+
+        const trace3 = {
+            y: y3,
+            mode: 'lines',
+            name: 'x0 = 0.201'
+        };
+
+        const layout2 = {
+            title: 'Sensitivity to Initial Conditions',
+            xaxis: { title: 'Iteration' },
+            yaxis: { title: 'Value' }
+        };
+
+        Plotly.newPlot('sensitivityPlot', [trace2, trace3], layout2);
+    </script>
 </body>
 </html>
 '''
