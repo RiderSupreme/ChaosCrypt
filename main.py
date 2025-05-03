@@ -63,22 +63,24 @@ HOME_TEMPLATE = '''
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #222; /* Dark background */
+            color: #eee; /* Light text */
         }
         .container {
-            background-color: white;
+            background-color: #333; /* Darker container */
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(255,0,0,0.1); /* Red shadow */
             margin-bottom: 20px;
+            border: 1px solid #555; /* Dark border */
         }
         .operations {
             text-align: center;
         }
-        h1, h2 { color: #333; }
+        h1, h2 { color: #ff4d4d; /* Red headings */ }
         .button {
             display: inline-block;
-            background-color: #4CAF50;
+            background-color: #ff4d4d; /* Red button */
             color: white;
             padding: 15px 30px;
             margin: 10px;
@@ -89,7 +91,13 @@ HOME_TEMPLATE = '''
             font-size: 16px;
         }
         .button:hover {
-            background-color: #d43d22;
+            background-color: #cc0000; /* Darker red on hover */
+        }
+        .button:nth-child(3){
+            background-color: #007bff; /* Blue accent button */
+        }
+        .button:nth-child(3):hover {
+            background-color: #0056b3; /* Darker blue on hover */
         }
         .explanation {
             text-align: left;
@@ -98,15 +106,16 @@ HOME_TEMPLATE = '''
         .graph {
             margin: 20px 0;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #555; /* Dark border */
             border-radius: 4px;
         }
         .code-block {
-            background-color: #f8f9fa;
+            background-color: #444; /* Darker gray code block */
             padding: 15px;
             border-radius: 4px;
             font-family: monospace;
             margin: 10px 0;
+            color: #eee; /* Light text */
         }
     </style>
 </head>
@@ -116,7 +125,7 @@ HOME_TEMPLATE = '''
         <h2>Choose Operation</h2>
         <a href="/encrypt" class="button">Encryption</a>
         <a href="/decrypt" class="button">Decryption</a>
-        <a href="/how-it-works" class="button" style="background-color: #3498db;">How Does It Work?</a>
+        <a href="/how-it-works" class="button" >How Does It Work?</a>
     </div>
 </body>
 </html>
@@ -134,16 +143,18 @@ HOW_IT_WORKS_TEMPLATE = '''
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #222; /* Dark background */
+            color: #eee; /* Light text */
         }
         .container {
-            background-color: white;
+            background-color: #333; /* Darker container */
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(255,0,0,0.1); /* Red shadow */
             margin-bottom: 20px;
+            border: 1px solid #555; /* Dark border */
         }
-        h1, h2, h3 { color: #333; }
+        h1, h2, h3 { color: #ff4d4d; /* Red headings */ }
         .button {
             display: inline-block;
             background-color: #7f8c8d;
@@ -166,22 +177,23 @@ HOW_IT_WORKS_TEMPLATE = '''
         .graph {
             margin: 20px 0;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #555; /* Dark border */
             border-radius: 4px;
         }
         .code-block {
-            background-color: #f8f9fa;
+            background-color: #444; /* Darker gray code block */
             padding: 15px;
             border-radius: 4px;
             font-family: monospace;
             margin: 10px 0;
+            color: #eee; /* Light text */
         }
     </style>
 </head>
 <body>
     <div class="container explanation">
         <h2>How Does It Work?</h2>
-        
+
         <h3>1. The Logistic Map</h3>
         <p>At the heart of our encryption system is the logistic map, a chaotic mathematical function:</p>
         <div class="code-block">x_{n+1} = r * x_n * (1 - x_n)</div>
@@ -218,14 +230,14 @@ HOW_IT_WORKS_TEMPLATE = '''
             const r = 3.99999999999999;
             const xValues = [x];
             const yValues = [];
-            
+
             for(let i = 0; i < n; i++) {
                 const nextX = r * x * (1 - x);
                 xValues.push(nextX);
                 yValues.push(nextX);
                 x = nextX;
             }
-            
+
             return [xValues.slice(0, -1), yValues];
         }
 
@@ -289,18 +301,20 @@ ENCRYPT_TEMPLATE = '''
             margin: 0;
             padding: 20px;
             min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #222; /* Dark background */
+            color: #eee; /* Light text */
         }
         .container {
-            background-color: white;
+            background-color: #333; /* Darker container */
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(255,0,0,0.1); /* Red shadow */
             max-width: 700px;
             margin: 0 auto;
+            border: 1px solid #555; /* Dark border */
         }
         h1 {
-            color: #2c3e50;
+            color: #ff4d4d; /* Red heading */
             text-align: center;
             margin-bottom: 30px;
             font-size: 2.2em;
@@ -311,21 +325,23 @@ ENCRYPT_TEMPLATE = '''
         label {
             display: block;
             margin-bottom: 8px;
-            color: #34495e;
+            color: #ff4d4d; /* Red labels */
             font-weight: 500;
         }
         textarea, input[type="number"] {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #ff0000; /* Red border */
             border-radius: 10px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
             box-sizing: border-box;
+            background-color: #1a1a1a; /* Dark gray background */
+            color: #ffffff; /* White text */
         }
         textarea:focus, input[type="number"]:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #007bff; /* Blue border on focus */
         }
         .button-group {
             display: flex;
@@ -334,7 +350,7 @@ ENCRYPT_TEMPLATE = '''
         }
         .button {
             flex: 1;
-            background-color: #3498db;
+            background-color: #007bff; /* Blue button */
             color: white;
             padding: 12px 20px;
             border: none;
@@ -347,7 +363,7 @@ ENCRYPT_TEMPLATE = '''
         }
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); /* Blue shadow */
         }
         .button.primary {
             background-color: #2ecc71;
@@ -358,12 +374,13 @@ ENCRYPT_TEMPLATE = '''
         .result {
             margin-top: 30px;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: #444; /* Dark gray result */
             border-radius: 10px;
             border-left: 4px solid #2ecc71;
+            color: #eee; /* Light text */
         }
         .result h3 {
-            color: #2c3e50;
+            color: #ff4d4d; /* Red heading */
             margin-top: 0;
         }
     </style>
@@ -378,7 +395,7 @@ ENCRYPT_TEMPLATE = '''
             </div>
             <div class="form-group">
                 <label>Mode:</label>
-                <select name="mode" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; margin-bottom: 15px;">
+                <select name="mode" style="width: 100%; padding: 12px; border: 2px solid #ff0000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; background-color: #1a1a1a; color: #ffffff;">
                     <option value="single">Single Encryption</option>
                     <option value="double">Double Encryption</option>
                 </select>
@@ -424,18 +441,20 @@ DECRYPT_TEMPLATE = '''
             margin: 0;
             padding: 20px;
             min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: #222; /* Dark background */
+            color: #eee; /* Light text */
         }
         .container {
-            background-color: white;
+            background-color: #333; /* Darker container */
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(255,0,0,0.1); /* Red shadow */
             max-width: 700px;
             margin: 0 auto;
+            border: 1px solid #555; /* Dark border */
         }
         h1 {
-            color: #2c3e50;
+            color: #ff4d4d; /* Red heading */
             text-align: center;
             margin-bottom: 30px;
             font-size: 2.2em;
@@ -446,21 +465,23 @@ DECRYPT_TEMPLATE = '''
         label {
             display: block;
             margin-bottom: 8px;
-            color: #34495e;
+            color: #ff4d4d; /* Red labels */
             font-weight: 500;
         }
         textarea, input[type="number"] {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #ff0000; /* Red border */
             border-radius: 10px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
             box-sizing: border-box;
+            background-color: #1a1a1a; /* Dark gray background */
+            color: #ffffff; /* White text */
         }
         textarea:focus, input[type="number"]:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #007bff; /* Blue border on focus */
         }
         .button-group {
             display: flex;
@@ -469,7 +490,7 @@ DECRYPT_TEMPLATE = '''
         }
         .button {
             flex: 1;
-            background-color: #3498db;
+            background-color: #007bff; /* Blue button */
             color: white;
             padding: 12px 20px;
             border: none;
@@ -482,7 +503,7 @@ DECRYPT_TEMPLATE = '''
         }
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); /* Blue shadow */
         }
         .button.primary {
             background-color: #2ecc71;
@@ -493,12 +514,13 @@ DECRYPT_TEMPLATE = '''
         .result {
             margin-top: 30px;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-color: #444; /* Dark gray result */
             border-radius: 10px;
             border-left: 4px solid #2ecc71;
+            color: #eee; /* Light text */
         }
         .result h3 {
-            color: #2c3e50;
+            color: #ff4d4d; /* Red heading */
             margin-top: 0;
         }
     </style>
@@ -513,7 +535,7 @@ DECRYPT_TEMPLATE = '''
             </div>
             <div class="form-group">
                 <label>Mode:</label>
-                <select name="mode" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; margin-bottom: 15px;">
+                <select name="mode" style="width: 100%; padding: 12px; border: 2px solid #ff0000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; background-color: #1a1a1a; color: #ffffff;">
                     <option value="single">Single Encryption</option>
                     <option value="double">Double Encryption</option>
                 </select>
