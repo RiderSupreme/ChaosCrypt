@@ -4,15 +4,12 @@ app = Flask(__name__)
 
 
 def logistic_map(x0, n):
-    r = 3.9999999  # Using a value closer to 4 increases chaos
+    r = 3.99999999999999999999999999999999999999999
     x = x0
-    # Perform more initial iterations to reach better chaos
     for _ in range(100):
         x = r * x * (1 - x)
-    # Then perform the requested iterations
     for _ in range(n):
         x = r * x * (1 - x)
-        # Add additional mixing
         x = (x + x0) % 1.0
     return x
 
@@ -27,7 +24,7 @@ def encrypt(message, x0, mode, x1=None):
     if mode == "double":
         double_encrypted = []
         for i, num in enumerate(encrypted):
-            x = logistic_map(x1, i+1)
+            x = logistic_map(x1, i + 1)
             chaos = int(x * 1000) % 256
             double_encrypted_char = (num + chaos) % 256
             double_encrypted.append(double_encrypted_char)
