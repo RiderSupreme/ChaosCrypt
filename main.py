@@ -116,8 +116,69 @@ HOME_TEMPLATE = '''
         <h2>Choose Operation</h2>
         <a href="/encrypt" class="button">Encryption</a>
         <a href="/decrypt" class="button">Decryption</a>
+        <a href="/how-it-works" class="button" style="background-color: #3498db;">How Does It Work?</a>
     </div>
+</body>
+</html>
+'''
 
+HOW_IT_WORKS_TEMPLATE = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>How It Works - Chaos-Based Cryptography</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2, h3 { color: #333; }
+        .button {
+            display: inline-block;
+            background-color: #7f8c8d;
+            color: white;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #95a5a6;
+        }
+        .explanation {
+            text-align: left;
+            padding: 20px;
+        }
+        .graph {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
     <div class="container explanation">
         <h2>How Does It Work?</h2>
         
@@ -210,6 +271,9 @@ HOME_TEMPLATE = '''
 
         Plotly.newPlot('sensitivityPlot', [trace2, trace3], layout2);
     </script>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/" class="button">Back to Home</a>
+    </div>
 </body>
 </html>
 '''
@@ -488,6 +552,10 @@ DECRYPT_TEMPLATE = '''
 @app.route('/')
 def home():
     return render_template_string(HOME_TEMPLATE)
+
+@app.route('/how-it-works')
+def how_it_works():
+    return render_template_string(HOW_IT_WORKS_TEMPLATE)
 
 
 @app.route('/encrypt', methods=['GET', 'POST'])
