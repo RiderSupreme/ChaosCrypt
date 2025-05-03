@@ -165,7 +165,7 @@ HOME_TEMPLATE = '''
 </head>
 <body>
     <nav class="nav">
-        <div class="logo">CHAOS CRYPT</div>
+        <div class="logo">CHAOSCRYPT</div>
         <div class="nav-links">
             <a href="/encrypt">Encrypt</a>
             <a href="/decrypt">Decrypt</a>
@@ -404,7 +404,7 @@ ENCRYPT_TEMPLATE = '''
         }
         .button {
             flex: 1;
-            background-color: #007bff; /* Blue button */
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
             color: white;
             padding: 12px 20px;
             border: none;
@@ -417,10 +417,7 @@ ENCRYPT_TEMPLATE = '''
         }
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); /* Blue shadow */
-        }
-        .button.primary {
-            background-color: #2ecc71;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3); /* Blue shadow */
         }
         .button.secondary {
             background-color: #7f8c8d;
@@ -469,7 +466,7 @@ ENCRYPT_TEMPLATE = '''
                 });
             </script>
             <div class="button-group">
-                <button type="submit" class="button primary">Encrypt</button>
+                <button type="submit" class="button">Encrypt</button>
                 <a href="/" class="button secondary">Back to Home</a>
             </div>
         </form>
@@ -544,7 +541,7 @@ DECRYPT_TEMPLATE = '''
         }
         .button {
             flex: 1;
-            background-color: #007bff; /* Blue button */
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
             color: white;
             padding: 12px 20px;
             border: none;
@@ -557,10 +554,7 @@ DECRYPT_TEMPLATE = '''
         }
         .button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); /* Blue shadow */
-        }
-        .button.primary {
-            background-color: #2ecc71;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3); /* Blue shadow */
         }
         .button.secondary {
             background-color: #7f8c8d;
@@ -609,7 +603,7 @@ DECRYPT_TEMPLATE = '''
                 });
             </script>
             <div class="button-group">
-                <button type="submit" class="button primary">Decrypt</button>
+                <button type="submit" class="button">Decrypt</button>
                 <a href="/" class="button secondary">Back to Home</a>
             </div>
         </form>
