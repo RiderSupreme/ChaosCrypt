@@ -1,4 +1,4 @@
-from flask import Flask, render_template_string, request, redirect, url_for, redirect, url_for
+from flask import Flask, render_template_string, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -293,16 +293,9 @@ HOME_TEMPLATE = '''
         <nav class="nav">
             <div class="logo">CHAOSCRYPT</div>
             <div class="nav-links">
-                {% if user_id %}
-                <span style="color: #fff; margin-right: 20px;">Welcome, {{ user_name }}!</span>
                 <a href="/encrypt">Encrypt</a>
                 <a href="/decrypt">Decrypt</a>
                 <a href="/how-it-works">Learn More</a>
-                {% else %}
-                <div>
-                    <script authed="location.reload()" src="https://auth.util.repl.co/script.js"></script>
-                </div>
-                {% endif %}
             </div>
         </nav>
 
@@ -785,9 +778,7 @@ DECRYPT_TEMPLATE = '''
 
 @app.route('/')
 def home():
-    user_id = request.headers.get('X-Replit-User-Id')
-    user_name = request.headers.get('X-Replit-User-Name')
-    return render_template_string(HOME_TEMPLATE, user_id=user_id, user_name=user_name)
+    return render_template_string(HOME_TEMPLATE)
 
 
 @app.route('/how-it-works')
@@ -797,8 +788,6 @@ def how_it_works():
 
 @app.route('/encrypt', methods=['GET', 'POST'])
 def encrypt_page():
-    if not request.headers.get('X-Replit-User-Id'):
-        return redirect(url_for('home'))
     if request.method == 'POST':
         message = request.form['message']
         mode = request.form['mode']
@@ -812,8 +801,6 @@ def encrypt_page():
 
 @app.route('/decrypt', methods=['GET', 'POST'])
 def decrypt_page():
-    if not request.headers.get('X-Replit-User-Id'):
-        return redirect(url_for('home'))
     if request.method == 'POST':
         try:
             encrypted_str = request.form['encrypted']
