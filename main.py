@@ -2,7 +2,7 @@ from flask import Flask, render_template_string, request, redirect, url_for
 
 app = Flask(__name__)
 
-
+# Your existing Python functions remain unchanged
 def logistic_map(x0, n):
     r = 3.99999999999999999999999999999999999999999
     x = x0
@@ -12,7 +12,6 @@ def logistic_map(x0, n):
         x = r * x * (1 - x)
         x = (x + x0) % 1.0
     return x
-
 
 def encrypt(message, x0, mode, x1=None):
     encrypted = []
@@ -30,7 +29,6 @@ def encrypt(message, x0, mode, x1=None):
             double_encrypted.append(double_encrypted_char)
         return double_encrypted
     return encrypted
-
 
 def decrypt(encrypted, x0, mode, x1=None):
     if mode == "double":
@@ -50,83 +48,139 @@ def decrypt(encrypted, x0, mode, x1=None):
         decrypted += chr(decrypted_char)
     return decrypted
 
-
 HOME_TEMPLATE = '''
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Chaos-Based Cryptography</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <title>Chaos Cryptography</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
             padding: 20px;
-            background-color: #222; /* Dark background */
-            color: #eee; /* Light text */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
         }
-        .container {
-            background-color: #333; /* Darker container */
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(255,0,0,0.1); /* Red shadow */
-            margin-bottom: 20px;
-            border: 1px solid #555; /* Dark border */
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            -webkit-background-clip: text;
+            color: transparent;
         }
-        .operations {
-            text-align: center;
-        }
-        h1, h2 { color: #ff4d4d; /* Red headings */ }
-        .button {
-            display: inline-block;
-            background-color: #ff4d4d; /* Red button */
-            color: white;
-            padding: 15px 30px;
-            margin: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+
+        .nav-links a {
+            color: #fff;
             text-decoration: none;
+            margin-left: 30px;
             font-size: 16px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
         }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 600px;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
         .button:hover {
-            background-color: #cc0000; /* Darker red on hover */
+            transform: translateY(-2px);
         }
-        .button:nth-child(3){
-            background-color: #007bff; /* Blue accent button */
+
+        .primary {
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.3);
         }
-        .button:nth-child(3):hover {
-            background-color: #0056b3; /* Darker blue on hover */
-        }
-        .explanation {
-            text-align: left;
-            padding: 20px;
-        }
-        .graph {
-            margin: 20px 0;
-            padding: 10px;
-            border: 1px solid #555; /* Dark border */
-            border-radius: 4px;
-        }
-        .code-block {
-            background-color: #444; /* Darker gray code block */
-            padding: 15px;
-            border-radius: 4px;
-            font-family: monospace;
-            margin: 10px 0;
-            color: #eee; /* Light text */
+
+        .secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
         }
     </style>
 </head>
 <body>
-    <div class="container operations">
-        <h1>Chaos-Based Cryptography</h1>
-        <h2>Choose Operation</h2>
-        <a href="/encrypt" class="button">Encryption</a>
-        <a href="/decrypt" class="button">Decryption</a>
-        <a href="/how-it-works" class="button" >How Does It Work?</a>
-    </div>
+    <nav class="nav">
+        <div class="logo">CHAOS CRYPT</div>
+        <div class="nav-links">
+            <a href="/encrypt">Encrypt</a>
+            <a href="/decrypt">Decrypt</a>
+            <a href="/how-it-works">Learn More</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Secure Your Data<br>With Chaos</h1>
+        <p>Experience military-grade encryption powered by chaos theory and advanced mathematics. Protect your messages with unprecedented security.</p>
+        <div class="cta-buttons">
+            <a href="/encrypt" class="button primary">Start Encrypting</a>
+            <a href="/how-it-works" class="button secondary">Learn More</a>
+        </div>
+    </section>
 </body>
 </html>
 '''
@@ -335,7 +389,7 @@ ENCRYPT_TEMPLATE = '''
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s;
-            box-sizing: border-box;
+            box-sizing: box-sizing;
             background-color: #1a1a1a; /* Dark gray background */
             color: #ffffff; /* White text */
         }
@@ -475,7 +529,7 @@ DECRYPT_TEMPLATE = '''
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s;
-            box-sizing: border-box;
+            box-sizing: box-sizing;
             background-color: #1a1a1a; /* Dark gray background */
             color: #ffffff; /* White text */
         }
@@ -611,7 +665,6 @@ def decrypt_page():
             return render_template_string(DECRYPT_TEMPLATE,
                                           result=f"Error: {str(e)}")
     return render_template_string(DECRYPT_TEMPLATE)
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
