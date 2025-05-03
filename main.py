@@ -463,38 +463,6 @@ HOW_IT_WORKS_TEMPLATE = '''
 
             Plotly.newPlot('sensitivityPlot', [trace2, trace3], layout2);
         </script>
-        <div class="container" style="margin-top: 30px;">
-            <h3>Source Code</h3>
-            <div class="code-block" style="max-height: 300px; overflow-y: auto;">
-                <pre><code>
-def logistic_map(x0, n, prev_state=None):
-    """Optimized logistic map that can continue from a previous state"""
-    r = 3.99999
-    if prev_state is None:
-        x = x0
-        for _ in range(100):
-            x = r * x * (1 - x)
-    else:
-        x = prev_state
-    x = r * x * (1 - x)
-    x = (x + x0) % 1.0
-    return x
-
-def encrypt(message, x0, mode, x1=None):
-    """Encrypt a message using chaos-based encryption"""
-    encrypted = []
-    state = x0
-    for _ in range(100):
-        state = 3.99999 * state * (1 - state)
-    for char in message:
-        state = 3.99999 * state * (1 - state)
-        state = (state + x0) % 1.0
-        chaos = int(state * 1000) % 256
-        encrypted_char = (ord(char) + chaos) % 256
-        encrypted.append(encrypted_char)
-    return encrypted</code></pre>
-            </div>
-        </div>
         <div style="text-align: center; margin-top: 20px;">
             <a href="/" class="button">Back to Home</a>
         </div>
