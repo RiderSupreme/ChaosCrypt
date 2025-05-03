@@ -1,6 +1,17 @@
 from flask import Flask, render_template_string, request, redirect, url_for
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key-here'  # Change this to a secure key
+
+# Add rate limiting
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"]
+)
 
 
 # Optimized Python functions
@@ -109,10 +120,10 @@ HOME_TEMPLATE = '''
     <html>
     <head>
         <title>Chaos Cryptography</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-16esztaSRplJROstbIXH3T/9ujwz7a6wyiGGN1CpAyQ/7bE5xw5QxtjMeqT+NFAza6yl9WaUzEiB+vAoqgw7ng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-            function initializeAnimation() {
+            document.addEventListener('DOMContentLoaded', function() {
                 if (typeof THREE === 'undefined' || typeof gsap === 'undefined') {
                     console.error('Required libraries not loaded');
                     setTimeout(initializeAnimation, 100);
@@ -417,7 +428,7 @@ HOW_IT_WORKS_TEMPLATE = '''
     <html>
     <head>
         <title>How It Works - Chaos-Based Cryptography</title>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
         <style>
             body {
                 font-family: Arial, sans-serif;
