@@ -2,8 +2,9 @@ from flask import Flask, render_template_string, request, redirect, url_for
 
 app = Flask(__name__)
 
+
 def logistic_map(x0, n):
-    r = 3.99999  # Using a value closer to 4 increases chaos
+    r = 3.9999999  # Using a value closer to 4 increases chaos
     x = x0
     # Perform more initial iterations to reach better chaos
     for _ in range(100):
@@ -15,6 +16,7 @@ def logistic_map(x0, n):
         x = (x + x0) % 1.0
     return x
 
+
 def encrypt(message, x0):
     encrypted = []
     for i, char in enumerate(message):
@@ -24,6 +26,7 @@ def encrypt(message, x0):
         encrypted.append(encrypted_char)
     return encrypted
 
+
 def decrypt(encrypted, x0):
     decrypted = ''
     for i, num in enumerate(encrypted):
@@ -32,6 +35,7 @@ def decrypt(encrypted, x0):
         decrypted_char = (num - chaos) % 256
         decrypted += chr(decrypted_char)
     return decrypted
+
 
 HOME_TEMPLATE = '''
 <!DOCTYPE html>
@@ -67,7 +71,7 @@ HOME_TEMPLATE = '''
             font-size: 16px;
         }
         .button:hover {
-            background-color: #45a049;
+            background-color: #d43d22;
         }
     </style>
 </head>
@@ -181,7 +185,7 @@ ENCRYPT_TEMPLATE = '''
                 <textarea name="message" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label>Initial Seed (any real number):</label>
+                <label>Initial Seed (Any Rational Number Between 0 And 1):</label>
                 <input type="number" name="seed" step="any" required>
             </div>
             <div class="button-group">
@@ -299,7 +303,7 @@ DECRYPT_TEMPLATE = '''
                 <textarea name="encrypted" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label>Initial Seed (any real number):</label>
+                <label>Initial Seed (Any Rational Number Between 0 And 1):</label>
                 <input type="number" name="seed" step="any" required>
             </div>
             <div class="button-group">
@@ -318,9 +322,11 @@ DECRYPT_TEMPLATE = '''
 </html>
 '''
 
+
 @app.route('/')
 def home():
     return render_template_string(HOME_TEMPLATE)
+
 
 @app.route('/encrypt', methods=['GET', 'POST'])
 def encrypt_page():
@@ -328,21 +334,28 @@ def encrypt_page():
         message = request.form['message']
         seed = float(request.form['seed'])
         encrypted = encrypt(message, seed)
-        return render_template_string(ENCRYPT_TEMPLATE, result=f"Encrypted message: {encrypted}")
+        return render_template_string(ENCRYPT_TEMPLATE,
+                                      result=f"Encrypted message: {encrypted}")
     return render_template_string(ENCRYPT_TEMPLATE)
+
 
 @app.route('/decrypt', methods=['GET', 'POST'])
 def decrypt_page():
     if request.method == 'POST':
         try:
             encrypted_str = request.form['encrypted']
-            encrypted_list = [int(x.strip()) for x in encrypted_str.strip('[]').split(',')]
+            encrypted_list = [
+                int(x.strip()) for x in encrypted_str.strip('[]').split(',')
+            ]
             seed = float(request.form['seed'])
             decrypted = decrypt(encrypted_list, seed)
-            return render_template_string(DECRYPT_TEMPLATE, result=f"Decrypted message: {decrypted}")
+            return render_template_string(
+                DECRYPT_TEMPLATE, result=f"Decrypted message: {decrypted}")
         except Exception as e:
-            return render_template_string(DECRYPT_TEMPLATE, result=f"Error: {str(e)}")
+            return render_template_string(DECRYPT_TEMPLATE,
+                                          result=f"Error: {str(e)}")
     return render_template_string(DECRYPT_TEMPLATE)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
