@@ -593,6 +593,7 @@ ENCRYPT_TEMPLATE = '''
                 </script>
                 <div class="button-group">
                     <button type="submit" class="button">Encrypt</button>
+                    <a href="/decrypt" class="button">Go to Decrypt</a>
                     <a href="/" class="button secondary">Back to Home</a>
                 </div>
             </form>
