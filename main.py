@@ -112,11 +112,90 @@ HOME_TEMPLATE = '''
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
         <script>
-            window.addEventListener('load', () => {
+            function initializeAnimation() {
                 if (typeof THREE === 'undefined' || typeof gsap === 'undefined') {
-                    location.reload();
+                    console.error('Required libraries not loaded');
+                    setTimeout(initializeAnimation, 100);
+                    return;
                 }
-            });
+                
+                try {
+                    // Three.js animation setup
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ alpha: true });
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    
+                    const container = document.getElementById('animation-container');
+                    if (container) {
+                        container.appendChild(renderer.domElement);
+                    }
+
+                    // Create particles
+                    const particlesGeometry = new THREE.BufferGeometry();
+                    const particlesCount = 1000;
+                    const posArray = new Float32Array(particlesCount * 3);
+
+                    for(let i = 0; i < particlesCount * 3; i++) {
+                        posArray[i] = (Math.random() - 0.5) * 5;
+                    }
+
+                    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                    const particlesMaterial = new THREE.PointsMaterial({
+                        size: 0.005,
+                        color: '#ff3366'
+                    });
+
+                    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+                    scene.add(particlesMesh);
+                    camera.position.z = 3;
+
+                    // Mouse and touch movement effect
+                    let mouseX = 0;
+                    let mouseY = 0;
+                    
+                    function handleMovement(x, y) {
+                        mouseX = x / window.innerWidth - 0.5;
+                        mouseY = y / window.innerHeight - 0.5;
+                    }
+                    
+                    document.addEventListener('mousemove', (event) => {
+                        handleMovement(event.clientX, event.clientY);
+                    });
+                    
+                    document.addEventListener('touchmove', (event) => {
+                        handleMovement(event.touches[0].clientX, event.touches[0].clientY);
+                    }, { passive: true });
+
+                    // Animation loop
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        if (particlesMesh) {
+                            particlesMesh.rotation.y += 0.001;
+                            particlesMesh.rotation.x += 0.001;
+                            
+                            gsap.to(particlesMesh.rotation, {
+                                x: mouseY * 0.5,
+                                y: mouseX * 0.5,
+                                duration: 2
+                            });
+                        }
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+
+                    // Handle window resize
+                    window.addEventListener('resize', () => {
+                        camera.aspect = window.innerWidth / window.innerHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(window.innerWidth, window.innerHeight);
+                    });
+                } catch (error) {
+                    console.error('Error initializing animation:', error);
+                }
+            }
+
+            window.addEventListener('load', initializeAnimation);
         </script>
         <style>
             #animation-container {
