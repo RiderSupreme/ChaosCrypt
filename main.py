@@ -68,6 +68,23 @@ HOME_TEMPLATE = '''
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+        
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        
+        .hero {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .animate-text, .animate-up {
+            opacity: 0;
         }
 
         .nav {
@@ -173,14 +190,89 @@ HOME_TEMPLATE = '''
         </div>
     </nav>
 
+    <canvas id="bgCanvas"></canvas>
     <section class="hero">
-        <h1>Secure Your Data<br>With Chaos</h1>
-        <p>Experience military-grade encryption powered by chaos theory and advanced mathematics. Protect your messages with unprecedented security.</p>
-        <div class="cta-buttons">
+        <h1 class="animate-text">Secure Your Data<br>With Chaos</h1>
+        <p class="animate-text">Experience military-grade encryption powered by chaos theory and advanced mathematics. Protect your messages with unprecedented security.</p>
+        <div class="cta-buttons animate-up">
             <a href="/encrypt" class="button primary">Start Encrypting</a>
             <a href="/how-it-works" class="button secondary">Learn More</a>
         </div>
     </section>
+    <script>
+        // Three.js Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bgCanvas'),
+            alpha: true
+        });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        
+        // Create particle system
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 5;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.005,
+            color: '#ff3366'
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 2;
+        
+        // Mouse movement effect
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX / window.innerWidth - 0.5;
+            mouseY = event.clientY / window.innerHeight - 0.5;
+        });
+        
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += mouseY * 0.001;
+            particlesMesh.rotation.y += mouseX * 0.001;
+            renderer.render(scene, camera);
+        }
+        animate();
+        
+        // GSAP Animations
+        gsap.from('.animate-text', {
+            duration: 1,
+            y: 100,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power4.out"
+        });
+        
+        gsap.from('.animate-up', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            delay: 0.8,
+            ease: "power3.out"
+        });
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
 '''
@@ -190,7 +282,8 @@ HOW_IT_WORKS_TEMPLATE = '''
 <html>
 <head>
     <title>How It Works - Chaos-Based Cryptography</title>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
