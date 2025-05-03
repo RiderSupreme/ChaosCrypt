@@ -1,58 +1,77 @@
-from flask import Flask, render_template_string, request, redirect, url_for
+const express = require('express');
+const app = express();
+const port = 5000;
 
-app = Flask(__name__)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-# Your existing Python functions remain unchanged
-def logistic_map(x0, n):
-    r = 3.99999999999999999999999999999999999999999
-    x = x0
-    for _ in range(100):
-        x = r * x * (1 - x)
-    for _ in range(n):
-        x = r * x * (1 - x)
-        x = (x + x0) % 1.0
-    return x
+// Logistic map function
+function logisticMap(x0, n) {
+    const r = 3.99999999999999999999999999999999999999999;
+    let x = x0;
+    for (let i = 0; i < 100; i++) {
+        x = r * x * (1 - x);
+    }
+    for (let i = 0; i < n; i++) {
+        x = r * x * (1 - x);
+        x = (x + x0) % 1.0;
+    }
+    return x;
+}
 
-def encrypt(message, x0, mode, x1=None):
-    encrypted = []
-    for i, char in enumerate(message):
-        x = logistic_map(x0, i + 1)
-        chaos = int(x * 1000) % 256
-        encrypted_char = (ord(char) + chaos) % 256
-        encrypted.append(encrypted_char)
-    if mode == "double":
-        double_encrypted = []
-        for i, num in enumerate(encrypted):
-            x = logistic_map(x1, i + 1)
-            chaos = int(x * 1000) % 256
-            double_encrypted_char = (num + chaos) % 256
-            double_encrypted.append(double_encrypted_char)
-        return double_encrypted
-    return encrypted
+// Encryption function
+function encrypt(message, x0, mode, x1 = null) {
+    let encrypted = [];
+    for (let i = 0; i < message.length; i++) {
+        const x = logisticMap(x0, i + 1);
+        const chaos = Math.floor(x * 1000) % 256;
+        const encryptedChar = (message.charCodeAt(i) + chaos) % 256;
+        encrypted.push(encryptedChar);
+    }
+    if (mode === "double") {
+        let doubleEncrypted = [];
+        for (let i = 0; i < encrypted.length; i++) {
+            const x = logisticMap(x1, i + 1);
+            const chaos = Math.floor(x * 1000) % 256;
+            const doubleEncryptedChar = (encrypted[i] + chaos) % 256;
+            doubleEncrypted.push(doubleEncryptedChar);
+        }
+        return doubleEncrypted;
+    }
+    return encrypted;
+}
 
-def decrypt(encrypted, x0, mode, x1=None):
-    if mode == "double":
-        partially_decrypted = []
-        for i, num in enumerate(encrypted):
-            x = logistic_map(x1, i + 1)
-            chaos = int(x * 1000) % 256
-            decrypted_char = (num - chaos) % 256
-            partially_decrypted.append(decrypted_char)
-        encrypted = partially_decrypted
+// Decryption function
+function decrypt(encrypted, x0, mode, x1 = null) {
+    if (mode === "double") {
+        let partiallyDecrypted = [];
+        for (let i = 0; i < encrypted.length; i++) {
+            const x = logisticMap(x1, i + 1);
+            const chaos = Math.floor(x * 1000) % 256;
+            const decryptedChar = (encrypted[i] - chaos + 256) % 256;
+            partiallyDecrypted.push(decryptedChar);
+        }
+        encrypted = partiallyDecrypted;
+    }
 
-    decrypted = ''
-    for i, num in enumerate(encrypted):
-        x = logistic_map(x0, i + 1)
-        chaos = int(x * 1000) % 256
-        decrypted_char = (num - chaos) % 256
-        decrypted += chr(decrypted_char)
-    return decrypted
+    let decrypted = '';
+    for (let i = 0; i < encrypted.length; i++) {
+        const x = logisticMap(x0, i + 1);
+        const chaos = Math.floor(x * 1000) % 256;
+        const decryptedChar = (encrypted[i] - chaos + 256) % 256;
+        decrypted += String.fromCharCode(decryptedChar);
+    }
+    return decrypted;
+}
 
-HOME_TEMPLATE = '''
+// Template strings
+const HOME_TEMPLATE = `
 <!DOCTYPE html>
 <html>
 <head>
     <title>Chaos Cryptography</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -68,6 +87,14 @@ HOME_TEMPLATE = '''
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
         }
 
         .nav {
@@ -112,7 +139,8 @@ HOME_TEMPLATE = '''
             align-items: center;
             text-align: center;
             padding: 0 20px;
-            background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
@@ -122,19 +150,22 @@ HOME_TEMPLATE = '''
             background: linear-gradient(45deg, #ff3366, #ff6b6b);
             -webkit-background-clip: text;
             color: transparent;
+            opacity: 0;
         }
 
         .hero p {
             font-size: 20px;
             max-width: 600px;
             margin-bottom: 40px;
-            opacity: 0.8;
+            opacity: 0;
             line-height: 1.6;
         }
 
         .cta-buttons {
             display: flex;
             gap: 20px;
+            opacity: 0;
+            transform: translateY(20px);
         }
 
         .button {
@@ -164,6 +195,7 @@ HOME_TEMPLATE = '''
     </style>
 </head>
 <body>
+    <canvas id="bgCanvas"></canvas>
     <nav class="nav">
         <div class="logo">CHAOSCRYPT</div>
         <div class="nav-links">
@@ -174,18 +206,93 @@ HOME_TEMPLATE = '''
     </nav>
 
     <section class="hero">
-        <h1>Secure Your Data<br>With Chaos</h1>
-        <p>Experience military-grade encryption powered by chaos theory and advanced mathematics. Protect your messages with unprecedented security.</p>
-        <div class="cta-buttons">
+        <h1 class="animate-text">Secure Your Data<br>With Chaos</h1>
+        <p class="animate-text">Experience military-grade encryption powered by chaos theory and advanced mathematics. Protect your messages with unprecedented security.</p>
+        <div class="cta-buttons animate-up">
             <a href="/encrypt" class="button primary">Start Encrypting</a>
             <a href="/how-it-works" class="button secondary">Learn More</a>
         </div>
     </section>
+
+    <script>
+        // Three.js Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bgCanvas'),
+            alpha: true
+        });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Create particle system
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 5000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 5;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.005,
+            color: '#ff3366'
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 2;
+
+        // Mouse movement effect
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX / window.innerWidth - 0.5;
+            mouseY = event.clientY / window.innerHeight - 0.5;
+        });
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x = mouseY * 0.5;
+            particlesMesh.rotation.y = mouseX * 0.5;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // GSAP Animations
+        gsap.from('.animate-text', {
+            duration: 1,
+            y: 30,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power4.out"
+        });
+
+        gsap.from('.animate-up', {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            delay: 0.8,
+            ease: "power3.out"
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
-'''
+`;
 
-HOW_IT_WORKS_TEMPLATE = '''
+const HOW_IT_WORKS_TEMPLATE = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -342,9 +449,9 @@ HOW_IT_WORKS_TEMPLATE = '''
     </div>
 </body>
 </html>
-'''
+`;
 
-ENCRYPT_TEMPLATE = '''
+const ENCRYPT_TEMPLATE = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -470,18 +577,16 @@ ENCRYPT_TEMPLATE = '''
                 <a href="/" class="button secondary">Back to Home</a>
             </div>
         </form>
-        {% if result %}
-        <div class="result">
+        <div class="result" style="display:none;">
             <h3>Result:</h3>
-            <p>{{ result }}</p>
+            <p></p>
         </div>
-        {% endif %}
     </div>
 </body>
 </html>
-'''
+`;
 
-DECRYPT_TEMPLATE = '''
+const DECRYPT_TEMPLATE = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -607,58 +712,52 @@ DECRYPT_TEMPLATE = '''
                 <a href="/" class="button secondary">Back to Home</a>
             </div>
         </form>
-        {% if result %}
-        <div class="result">
+        <div class="result" style="display:none;">
             <h3>Result:</h3>
-            <p>{{ result }}</p>
+            <p></p>
         </div>
-        {% endif %}
     </div>
 </body>
 </html>
-'''
+`;
 
+// Routes
+app.get('/', (req, res) => {
+    res.send(HOME_TEMPLATE);
+});
 
-@app.route('/')
-def home():
-    return render_template_string(HOME_TEMPLATE)
+app.get('/encrypt', (req, res) => {
+    res.send(ENCRYPT_TEMPLATE);
+});
 
-@app.route('/how-it-works')
-def how_it_works():
-    return render_template_string(HOW_IT_WORKS_TEMPLATE)
+app.post('/encrypt', (req, res) => {
+    const { message, mode, seed1, seed2 } = req.body;
+    const encrypted = encrypt(message, parseFloat(seed1), mode, seed2 ? parseFloat(seed2) : null);
+    const resultHTML = ENCRYPT_TEMPLATE.replace('{% if result %}', '').replace('{% endif %}', '').replace('{{ result }}', `Encrypted message: ${encrypted}`);
+    res.send(resultHTML.replace('<div class="result" style="display:none;">', '<div class="result">'));
+});
 
+app.get('/decrypt', (req, res) => {
+    res.send(DECRYPT_TEMPLATE);
+});
 
-@app.route('/encrypt', methods=['GET', 'POST'])
-def encrypt_page():
-    if request.method == 'POST':
-        message = request.form['message']
-        mode = request.form['mode']
-        seed1 = float(request.form['seed1'])
-        seed2 = float(request.form['seed2']) if mode == "double" else None
-        encrypted = encrypt(message, seed1, mode, seed2)
-        return render_template_string(ENCRYPT_TEMPLATE,
-                                      result=f"Encrypted message: {encrypted}")
-    return render_template_string(ENCRYPT_TEMPLATE)
+app.post('/decrypt', (req, res) => {
+    try {
+        const { encrypted, mode, seed1, seed2 } = req.body;
+        const encryptedList = encrypted.trim().split(',').map(x => parseInt(x.trim()));
+        const decrypted = decrypt(encryptedList, parseFloat(seed1), mode, seed2 ? parseFloat(seed2) : null);
+        const resultHTML = DECRYPT_TEMPLATE.replace('{% if result %}', '').replace('{% endif %}', '').replace('{{ result }}', `Decrypted message: ${decrypted}`);
+        res.send(resultHTML.replace('<div class="result" style="display:none;">', '<div class="result">'));
+    } catch (e) {
+        const errorHTML = DECRYPT_TEMPLATE.replace('{% if result %}', '').replace('{% endif %}', '').replace('{{ result }}', `Error: ${e.message}`);
+        res.send(errorHTML.replace('<div class="result" style="display:none;">', '<div class="result">'));
+    }
+});
 
+app.get('/how-it-works', (req, res) => {
+    res.send(HOW_IT_WORKS_TEMPLATE);
+});
 
-@app.route('/decrypt', methods=['GET', 'POST'])
-def decrypt_page():
-    if request.method == 'POST':
-        try:
-            encrypted_str = request.form['encrypted']
-            encrypted_list = [
-                int(x.strip()) for x in encrypted_str.strip('[]').split(',')
-            ]
-            mode = request.form['mode']
-            seed1 = float(request.form['seed1'])
-            seed2 = float(request.form['seed2']) if mode == "double" else None
-            decrypted = decrypt(encrypted_list, seed1, mode, seed2)
-            return render_template_string(
-                DECRYPT_TEMPLATE, result=f"Decrypted message: {decrypted}")
-        except Exception as e:
-            return render_template_string(DECRYPT_TEMPLATE,
-                                          result=f"Error: {str(e)}")
-    return render_template_string(DECRYPT_TEMPLATE)
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server running at http://0.0.0.0:${port}`);
+});
