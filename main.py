@@ -17,17 +17,34 @@ def logistic_map(x0, n):
     return x
 
 
-def encrypt(message, x0):
+def encrypt(message, x0, mode, x1=None):
     encrypted = []
     for i, char in enumerate(message):
         x = logistic_map(x0, i + 1)
         chaos = int(x * 1000) % 256
         encrypted_char = (ord(char) + chaos) % 256
         encrypted.append(encrypted_char)
+    if mode == "double":
+        double_encrypted = []
+        for i, num in enumerate(encrypted):
+            x = logistic_map(x1, i+1)
+            chaos = int(x * 1000) % 256
+            double_encrypted_char = (num + chaos) % 256
+            double_encrypted.append(double_encrypted_char)
+        return double_encrypted
     return encrypted
 
 
-def decrypt(encrypted, x0):
+def decrypt(encrypted, x0, mode, x1=None):
+    if mode == "double":
+        partially_decrypted = []
+        for i, num in enumerate(encrypted):
+            x = logistic_map(x1, i + 1)
+            chaos = int(x * 1000) % 256
+            decrypted_char = (num - chaos) % 256
+            partially_decrypted.append(decrypted_char)
+        encrypted = partially_decrypted
+
     decrypted = ''
     for i, num in enumerate(encrypted):
         x = logistic_map(x0, i + 1)
@@ -185,9 +202,26 @@ ENCRYPT_TEMPLATE = '''
                 <textarea name="message" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label>Initial Seed (Any Rational Number Between 0 And 1):</label>
-                <input type="number" name="seed" step="any" required>
+                <label>Mode:</label>
+                <select name="mode" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; margin-bottom: 15px;">
+                    <option value="single">Single Encryption</option>
+                    <option value="double">Double Encryption</option>
+                </select>
             </div>
+            <div class="form-group">
+                <label>First Seed (Any Rational Number Between 0 And 1):</label>
+                <input type="number" name="seed1" step="any" required>
+            </div>
+            <div class="form-group" id="seed2Group" style="display: none;">
+                <label>Second Seed (Any Rational Number Between 0 And 1):</label>
+                <input type="number" name="seed2" step="any">
+            </div>
+            <script>
+                document.querySelector('select[name="mode"]').addEventListener('change', function() {
+                    document.getElementById('seed2Group').style.display = 
+                        this.value === 'double' ? 'block' : 'none';
+                });
+            </script>
             <div class="button-group">
                 <button type="submit" class="button primary">Encrypt</button>
                 <a href="/" class="button secondary">Back to Home</a>
@@ -303,9 +337,26 @@ DECRYPT_TEMPLATE = '''
                 <textarea name="encrypted" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label>Initial Seed (Any Rational Number Between 0 And 1):</label>
-                <input type="number" name="seed" step="any" required>
+                <label>Mode:</label>
+                <select name="mode" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; margin-bottom: 15px;">
+                    <option value="single">Single Encryption</option>
+                    <option value="double">Double Encryption</option>
+                </select>
             </div>
+            <div class="form-group">
+                <label>First Seed (Any Rational Number Between 0 And 1):</label>
+                <input type="number" name="seed1" step="any" required>
+            </div>
+            <div class="form-group" id="seed2Group" style="display: none;">
+                <label>Second Seed (Any Rational Number Between 0 And 1):</label>
+                <input type="number" name="seed2" step="any">
+            </div>
+            <script>
+                document.querySelector('select[name="mode"]').addEventListener('change', function() {
+                    document.getElementById('seed2Group').style.display = 
+                        this.value === 'double' ? 'block' : 'none';
+                });
+            </script>
             <div class="button-group">
                 <button type="submit" class="button primary">Decrypt</button>
                 <a href="/" class="button secondary">Back to Home</a>
@@ -332,8 +383,10 @@ def home():
 def encrypt_page():
     if request.method == 'POST':
         message = request.form['message']
-        seed = float(request.form['seed'])
-        encrypted = encrypt(message, seed)
+        mode = request.form['mode']
+        seed1 = float(request.form['seed1'])
+        seed2 = float(request.form['seed2']) if mode == "double" else None
+        encrypted = encrypt(message, seed1, mode, seed2)
         return render_template_string(ENCRYPT_TEMPLATE,
                                       result=f"Encrypted message: {encrypted}")
     return render_template_string(ENCRYPT_TEMPLATE)
@@ -347,8 +400,10 @@ def decrypt_page():
             encrypted_list = [
                 int(x.strip()) for x in encrypted_str.strip('[]').split(',')
             ]
-            seed = float(request.form['seed'])
-            decrypted = decrypt(encrypted_list, seed)
+            mode = request.form['mode']
+            seed1 = float(request.form['seed1'])
+            seed2 = float(request.form['seed2']) if mode == "double" else None
+            decrypted = decrypt(encrypted_list, seed1, mode, seed2)
             return render_template_string(
                 DECRYPT_TEMPLATE, result=f"Decrypted message: {decrypted}")
         except Exception as e:
