@@ -57,14 +57,21 @@
         }
         textarea, input[type="number"] {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
+            padding: 15px;
+            border: 2px solid #7928ca;
+            border-radius: 12px;
             font-size: 16px;
-            transition: all 0.3s;
-            box-sizing: box-sizing;
-            background-color: #1a1a1a;
+            transition: all 0.3s ease;
+            background-color: rgba(26, 26, 26, 0.8);
             color: #ffffff;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea:focus, input[type="number"]:focus {
+            border-color: #ff0080;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.2);
+            transform: translateY(-2px);
         }
         textarea:focus, input[type="number"]:focus {
             outline: none;
