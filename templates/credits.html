@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Credits - Chaos-Based Cryptography</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Sora', sans-serif;
+            background: linear-gradient(-45deg, #0f0f1a, #1a1a2e, #2a1a3a, #1a2a3e);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #eee;
+            margin: 0;
+            padding-top: 80px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 16px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            background: rgba(51, 51, 51, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1, h2 {
+            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-member {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: #333;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #ff3366;
+        }
+
+        .member-role {
+            font-size: 0.9em;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .member-contribution {
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="logo">CHAOSCRYPT</div>
+        <div class="nav-links">
+            <a href="/encrypt">Encrypt</a>
+            <a href="/decrypt">Decrypt</a>
+            <a href="/how-it-works">Learn More</a>
+            <a href="/credits">Credits</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="section">
+            <h1>Our Team</h1>
+            <div class="team-grid">
+                <!-- Template for team members -->
+                <div class="team-member">
+                    <div class="member-image"></div>
+                    <div class="member-name">Developer Name</div>
+                    <div class="member-role">Role</div>
+                    <div class="member-contribution">
+                        Contribution description goes here
+                    </div>
+                </div>
+                <!-- Add more team members here -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>About the Project</h2>
+            <div class="about-content">
+                <p>ChaosEncrypt is a cutting-edge encryption system that leverages chaos theory for secure communication. Our implementation uses the logistic map's chaotic properties to generate unpredictable yet deterministic sequences for encryption.</p>
+                <p>The project began as an exploration of applying mathematical concepts to cryptography, evolving into a robust encryption solution that combines theoretical foundations with practical security measures.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

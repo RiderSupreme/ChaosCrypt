@@ -108,6 +108,10 @@ def home():
 def how_it_works():
     return render_template('how_it_works.html')
 
+@app.route('/credits')
+def credits():
+    return render_template('credits.html')
+
 @app.route('/encrypt', methods=['GET', 'POST'])
 def encrypt_page():
     if request.method == 'POST':
