@@ -124,23 +124,121 @@
     </div>
 
     <script>
-        // Generate bifurcation diagram data
-        function generateBifurcationData(points, iterations) {
+        // Interactive logistic map visualization
+        function createInteractiveLogisticMap() {
+            const x = Array.from({length: 100}, (_, i) => i/99);
+            const r = 3.99999;
+            const y = x.map(xi => r * xi * (1 - xi));
+
+            const trace1 = {
+                x: x,
+                y: y,
+                mode: 'lines',
+                name: 'Logistic Map',
+                line: {
+                    color: '#ff3366',
+                    width: 2
+                }
+            };
+
+            const identityLine = {
+                x: [0, 1],
+                y: [0, 1],
+                mode: 'lines',
+                name: 'y = x',
+                line: {
+                    color: '#666',
+                    width: 1,
+                    dash: 'dash'
+                }
+            };
+
+            let currentPoint = {
+                x: [0.2],
+                y: [r * 0.2 * (1 - 0.2)],
+                mode: 'markers',
+                name: 'Current Point',
+                marker: {
+                    size: 10,
+                    color: '#2ecc71'
+                }
+            };
+
+            const layout = {
+                title: 'Interactive Logistic Map',
+                xaxis: { 
+                    title: 'x_n',
+                    range: [0, 1],
+                    gridcolor: '#444',
+                    zerolinecolor: '#666'
+                },
+                yaxis: { 
+                    title: 'x_{n+1}',
+                    range: [0, 1],
+                    gridcolor: '#444',
+                    zerolinecolor: '#666'
+                },
+                plot_bgcolor: '#333',
+                paper_bgcolor: '#333',
+                font: { color: '#fff' },
+                showlegend: true,
+                legend: {
+                    font: { color: '#fff' }
+                },
+                updatemenus: [{
+                    type: 'buttons',
+                    showactive: false,
+                    x: 0.1,
+                    y: 1.1,
+                    buttons: [{
+                        label: 'Play',
+                        method: 'animate',
+                        args: [null, {
+                            fromcurrent: true,
+                            frame: {duration: 50},
+                            mode: 'immediate',
+                            transition: {duration: 50}
+                        }]
+                    }]
+                }]
+            };
+
+            Plotly.newPlot('logisticPlot', [trace1, identityLine, currentPoint], layout);
+
+            let x_n = 0.2;
+            function animate() {
+                x_n = r * x_n * (1 - x_n);
+                const update = {
+                    x: [[x_n]],
+                    y: [[r * x_n * (1 - x_n)]]
+                };
+                Plotly.animate('logisticPlot', {
+                    data: [{}, {}, update],
+                    traces: [2],
+                    layout: {}
+                }, {
+                    transition: {duration: 0},
+                    frame: {duration: 50}
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Enhanced bifurcation diagram
+        function createBifurcationDiagram() {
             const rValues = [];
             const xValues = [];
+            let points = 1000;
+            let iterations = 100;
 
-            for(let r = 2.8; r <= 3.57; r += (0.77/points)) {
+            for(let r = 2.8; r <= 4; r += (1.2/points)) {
                 let x = 0.5;
-
-                // Warm up
                 for(let i = 0; i < 100; i++) {
                     x = r * x * (1 - x);
                 }
-
-                // Adaptive sampling based on r value
+                
                 const localIterations = r > 3.57 ? Math.floor(iterations * 0.3) : iterations;
-
-                // Collect points
                 for(let i = 0; i < localIterations; i++) {
                     x = r * x * (1 - x);
                     rValues.push(r);
@@ -148,172 +246,117 @@
                 }
             }
 
-            return [rValues, xValues];
+            const trace = {
+                x: rValues,
+                y: xValues,
+                mode: 'markers',
+                type: 'scattergl',
+                marker: {
+                    size: 1,
+                    opacity: 0.5,
+                    color: xValues,
+                    colorscale: 'Viridis'
+                }
+            };
+
+            const layout = {
+                title: 'Interactive Bifurcation Diagram',
+                xaxis: { 
+                    title: 'r parameter',
+                    range: [2.8, 4]
+                },
+                yaxis: { 
+                    title: 'x values',
+                    range: [0, 1]
+                },
+                plot_bgcolor: '#333',
+                paper_bgcolor: '#333',
+                font: { color: '#fff' },
+                dragmode: 'zoom',
+                hovermode: 'closest'
+            };
+
+            const config = {
+                responsive: true,
+                scrollZoom: true,
+                displayModeBar: true,
+                modeBarButtonsToAdd: ['drawline', 'eraseshape']
+            };
+
+            Plotly.newPlot('bifurcationPlot', [trace], layout, config);
         }
 
-        let debounceTimer;
-        // Initial bifurcation plot with GPU optimizations
-        function updateBifurcationPlot() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const points = parseInt(document.getElementById('pointsSlider').value);
-                const iterations = parseInt(document.getElementById('iterationsSlider').value);
-                const [rValues, xValues] = generateBifurcationData(points, iterations);
-
-                const trace = {
-                    x: rValues,
-                    y: xValues,
-                    mode: 'scattergl',
-                    type: 'scattergl',
-                    marker: {
-                        size: 1,
-                        opacity: 0.5,
-                        color: '#ff3366'
-                    }
-                };
-
-                const layout = {
-                    title: 'Period-Doubling Cascade in Logistic Map',
-                    xaxis: { 
-                        title: 'r parameter',
-                        tickformat: '.2f',
-                        dtick: 0.1
-                    },
-                    yaxis: { 
-                        title: 'Stable points',
-                        range: [0, 1]
-                    },
-                    plot_bgcolor: '#333',
-                    paper_bgcolor: '#333',
-                    font: { color: '#fff' },
-                    uirevision: 'true'
-                };
-
-                const config = {
-                    responsive: true,
-                    displayModeBar: false
-                };
-
-                Plotly.react('bifurcationPlot', [trace], layout, config);
-            }, 250);
-        }
-
-        // Add throttled event listeners for sliders
-        const sliders = ['pointsSlider', 'iterationsSlider'];
-        sliders.forEach(id => {
-            document.getElementById(id).addEventListener('input', updateBifurcationPlot);
-        });
-
-        // Initial plot
-        updateBifurcationPlot();
-        // Generate logistic map plot
-        function generateLogisticData(x0, n) {
-            let x = x0;
+        // Sensitivity visualization with interactive initial conditions
+        function createSensitivityPlot() {
+            let x1 = 0.2;
+            let x2 = 0.201;
             const r = 3.99999;
-            const xValues = [x];
-            const yValues = [];
+            const iterations = 50;
+            
+            const trace1 = {
+                y: Array.from({length: iterations}, (_, i) => {
+                    x1 = r * x1 * (1 - x1);
+                    return x1;
+                }),
+                mode: 'lines+markers',
+                name: 'Initial x = 0.2',
+                line: {color: '#ff3366'},
+                marker: {size: 5}
+            };
 
-            for(let i = 0; i < n; i++) {
-                const nextX = r * x * (1 - x);
-                xValues.push(nextX);
-                yValues.push(nextX);
-                x = nextX;
-            }
+            const trace2 = {
+                y: Array.from({length: iterations}, (_, i) => {
+                    x2 = r * x2 * (1 - x2);
+                    return x2;
+                }),
+                mode: 'lines+markers',
+                name: 'Initial x = 0.201',
+                line: {color: '#2ecc71'},
+                marker: {size: 5}
+            };
 
-            return [xValues.slice(0, -1), yValues];
+            const layout = {
+                title: 'Interactive Sensitivity Analysis',
+                xaxis: {
+                    title: 'Iteration',
+                    gridcolor: '#444'
+                },
+                yaxis: {
+                    title: 'Value',
+                    gridcolor: '#444'
+                },
+                plot_bgcolor: '#333',
+                paper_bgcolor: '#333',
+                font: {color: '#fff'},
+                showlegend: true,
+                legend: {font: {color: '#fff'}},
+                updatemenus: [{
+                    y: 1.1,
+                    x: 0.1,
+                    yanchor: 'top',
+                    buttons: [{
+                        method: 'restyle',
+                        args: ['visible', [true, true]],
+                        label: 'Both'
+                    }, {
+                        method: 'restyle',
+                        args: ['visible', [true, false]],
+                        label: 'Path 1'
+                    }, {
+                        method: 'restyle',
+                        args: ['visible', [false, true]],
+                        label: 'Path 2'
+                    }]
+                }]
+            };
+
+            Plotly.newPlot('sensitivityPlot', [trace1, trace2], layout);
         }
 
-        // Plot logistic map
-        const [x1, y1] = generateLogisticData(0.2, 100);
-        const trace1 = {
-            x: x1,
-            y: y1,
-            mode: 'lines',
-            name: 'Logistic Map',
-            line: {
-                color: '#ff3366',
-                width: 2
-            }
-        };
-
-        // Add the y=x line for reference
-        const identityLine = {
-            x: [0, 1],
-            y: [0, 1],
-            mode: 'lines',
-            name: 'y = x',
-            line: {
-                color: '#666',
-                width: 1,
-                dash: 'dash'
-            }
-        };
-
-        const layout1 = {
-                    title: 'Logistic Map Behavior',
-                    xaxis: { 
-                        title: 'x_n',
-                        gridcolor: '#444',
-                        zerolinecolor: '#666'
-                    },
-                    yaxis: { 
-                        title: 'x_{n+1}',
-                        gridcolor: '#444',
-                        zerolinecolor: '#666'
-                    },
-                    plot_bgcolor: '#333',
-                    paper_bgcolor: '#333',
-                    font: { color: '#fff' }
-                };
-
-        Plotly.newPlot('logisticPlot', [trace1, identityLine], layout1);
-
-        // Plot sensitivity demonstration
-        const [x2, y2] = generateLogisticData(0.2, 50);
-        const [x3, y3] = generateLogisticData(0.201, 50);
-
-        const trace2 = {
-            y: y2,
-            mode: 'lines',
-            name: 'x0 = 0.2',
-            line: {
-                color: '#ff3366',
-                width: 2
-            }
-        };
-
-        const trace3 = {
-            y: y3,
-            mode: 'lines',
-            name: 'x0 = 0.201',
-            line: {
-                color: '#2ecc71',
-                width: 2
-            }
-        };
-
-        const layout2 = {
-                    title: 'Sensitivity to Initial Conditions',
-                    xaxis: { 
-                        title: 'Iteration',
-                        gridcolor: '#444',
-                        zerolinecolor: '#666'
-                    },
-                    yaxis: { 
-                        title: 'Value',
-                        gridcolor: '#444',
-                        zerolinecolor: '#666'
-                    },
-                    plot_bgcolor: '#333',
-                    paper_bgcolor: '#333',
-                    font: { color: '#fff' },
-                    showlegend: true,
-                    legend: {
-                        font: { color: '#fff' }
-                    }
-                };
-
-        Plotly.newPlot('sensitivityPlot', [trace2, trace3], layout2);
+        // Initialize all plots
+        createInteractiveLogisticMap();
+        createBifurcationDiagram();
+        createSensitivityPlot();
     </script>
     <div style="text-align: center; margin-top: 20px;">
         <a href="/" class="button">Back to Home</a>
