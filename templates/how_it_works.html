@@ -113,7 +113,7 @@
         </ul>
 
         <div id="sensitivityPlot" class="graph"></div>
-        
+
         <h3>4. Bifurcation Diagram</h3>
         <p>The logistic map exhibits different behaviors based on the value of r. This interactive diagram shows how the system transitions from stable to chaotic behavior:</p>
         <div class="controls">
@@ -128,18 +128,18 @@
         function generateBifurcationData(points, iterations) {
             const rValues = [];
             const xValues = [];
-            
+
             for(let r = 2.8; r <= 3.57; r += (0.77/points)) {
                 let x = 0.5;
-                
+
                 // Warm up
                 for(let i = 0; i < 100; i++) {
                     x = r * x * (1 - x);
                 }
-                
+
                 // Adaptive sampling based on r value
                 const localIterations = r > 3.57 ? Math.floor(iterations * 0.3) : iterations;
-                
+
                 // Collect points
                 for(let i = 0; i < localIterations; i++) {
                     x = r * x * (1 - x);
@@ -147,7 +147,7 @@
                     xValues.push(x);
                 }
             }
-            
+
             return [rValues, xValues];
         }
 
@@ -159,7 +159,7 @@
                 const points = parseInt(document.getElementById('pointsSlider').value);
                 const iterations = parseInt(document.getElementById('iterationsSlider').value);
                 const [rValues, xValues] = generateBifurcationData(points, iterations);
-                
+
                 const trace = {
                     x: rValues,
                     y: xValues,
@@ -234,10 +234,21 @@
         };
 
         const layout1 = {
-            title: 'Logistic Map Behavior',
-            xaxis: { title: 'x_n' },
-            yaxis: { title: 'x_{n+1}' }
-        };
+                    title: 'Logistic Map Behavior',
+                    xaxis: { 
+                        title: 'x_n',
+                        gridcolor: '#444',
+                        zerolinecolor: '#666'
+                    },
+                    yaxis: { 
+                        title: 'x_{n+1}',
+                        gridcolor: '#444',
+                        zerolinecolor: '#666'
+                    },
+                    plot_bgcolor: '#333',
+                    paper_bgcolor: '#333',
+                    font: { color: '#fff' }
+                };
 
         Plotly.newPlot('logisticPlot', [trace1], layout1);
 
@@ -258,10 +269,25 @@
         };
 
         const layout2 = {
-            title: 'Sensitivity to Initial Conditions',
-            xaxis: { title: 'Iteration' },
-            yaxis: { title: 'Value' }
-        };
+                    title: 'Sensitivity to Initial Conditions',
+                    xaxis: { 
+                        title: 'Iteration',
+                        gridcolor: '#444',
+                        zerolinecolor: '#666'
+                    },
+                    yaxis: { 
+                        title: 'Value',
+                        gridcolor: '#444',
+                        zerolinecolor: '#666'
+                    },
+                    plot_bgcolor: '#333',
+                    paper_bgcolor: '#333',
+                    font: { color: '#fff' },
+                    showlegend: true,
+                    legend: {
+                        font: { color: '#fff' }
+                    }
+                };
 
         Plotly.newPlot('sensitivityPlot', [trace2, trace3], layout2);
     </script>
