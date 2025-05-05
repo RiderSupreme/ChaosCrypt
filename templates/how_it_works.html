@@ -112,6 +112,9 @@
             <li><strong>Double Encryption Option:</strong> Adds an extra layer of security with a second chaotic sequence</li>
         </ul>
 
+        <div class="controls">
+            <label>Iterations: <input type="range" id="sensitivityIterationsSlider" min="10" max="100" value="50" /></label>
+        </div>
         <div id="sensitivityPlot" class="graph"></div>
 
         <h3>4. Bifurcation Diagram</h3>
@@ -299,11 +302,10 @@
         }
 
         // Sensitivity visualization with interactive initial conditions
-        function createSensitivityPlot() {
+        function createSensitivityPlot(iterations = 50) {
             let x1 = 0.2;
             let x2 = 0.201;
             const r = 3.99999;
-            const iterations = 50;
             
             const trace1 = {
                 y: Array.from({length: iterations}, (_, i) => {
@@ -376,6 +378,11 @@
         createInteractiveLogisticMap();
         createBifurcationDiagram();
         createSensitivityPlot();
+
+        // Add slider event listener
+        document.getElementById('sensitivityIterationsSlider').addEventListener('input', function() {
+            createSensitivityPlot(parseInt(this.value));
+        });
     </script>
     <div style="text-align: center; margin-top: 20px;">
         <a href="/" class="button">Back to Home</a>
