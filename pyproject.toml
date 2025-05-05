@@ -1,8 +1,8 @@
 [project]
 name = "python-template"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "An attempt at encrytption using a nonlinear logistics map to convert letters to ASCII and then apply a chaotic yet deterministic function to those ASCII codes, then reiterate the resultant numbers to ASCII code as output. This represents one cycle. there is an option for a double cycle encyrption mode as well. This type of encryption is an example of a CBC, Chaos-Based Cryptography. Just for math hw."
+authors = ["Rider_Supreme>"]
 requires-python = ">=3.11"
 dependencies = [
     "flask>=3.1.0",
