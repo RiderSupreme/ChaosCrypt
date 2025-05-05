@@ -137,39 +137,51 @@
             return [rValues, xValues];
         }
 
-        // Initial bifurcation plot
+        let debounceTimer;
+        // Initial bifurcation plot with GPU optimizations
         function updateBifurcationPlot() {
-            const points = parseInt(document.getElementById('pointsSlider').value);
-            const iterations = parseInt(document.getElementById('iterationsSlider').value);
-            const [rValues, xValues] = generateBifurcationData(points, iterations);
-            
-            const trace = {
-                x: rValues,
-                y: xValues,
-                mode: 'markers',
-                type: 'scatter',
-                marker: {
-                    size: 1,
-                    opacity: 0.5,
-                    color: '#ff3366'
-                }
-            };
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                const points = parseInt(document.getElementById('pointsSlider').value);
+                const iterations = parseInt(document.getElementById('iterationsSlider').value);
+                const [rValues, xValues] = generateBifurcationData(points, iterations);
+                
+                const trace = {
+                    x: rValues,
+                    y: xValues,
+                    mode: 'scattergl',
+                    type: 'scattergl',
+                    marker: {
+                        size: 1,
+                        opacity: 0.5,
+                        color: '#ff3366'
+                    }
+                };
 
-            const layout = {
-                title: 'Bifurcation Diagram of Logistic Map',
-                xaxis: { title: 'r parameter' },
-                yaxis: { title: 'Stable points' },
-                plot_bgcolor: '#333',
-                paper_bgcolor: '#333',
-                font: { color: '#fff' }
-            };
+                const layout = {
+                    title: 'Bifurcation Diagram of Logistic Map',
+                    xaxis: { title: 'r parameter' },
+                    yaxis: { title: 'Stable points' },
+                    plot_bgcolor: '#333',
+                    paper_bgcolor: '#333',
+                    font: { color: '#fff' },
+                    uirevision: 'true'
+                };
 
-            Plotly.newPlot('bifurcationPlot', [trace], layout);
+                const config = {
+                    responsive: true,
+                    displayModeBar: false
+                };
+
+                Plotly.react('bifurcationPlot', [trace], layout, config);
+            }, 250);
         }
 
-        // Add event listeners for sliders
-        document.getElementById('pointsSlider').addEventListener('input', updateBifurcationPlot);
-        document.getElementById('iterationsSlider').addEventListener('input', updateBifurcationPlot);
+        // Add throttled event listeners for sliders
+        const sliders = ['pointsSlider', 'iterationsSlider'];
+        sliders.forEach(id => {
+            document.getElementById(id).addEventListener('input', updateBifurcationPlot);
+        });
 
         // Initial plot
         updateBifurcationPlot();
