@@ -1,13 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
-import os
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
-app.config['UPLOAD_FOLDER'] = 'uploads'
-
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 # Optimized Python functions
 def logistic_map(x0, n, prev_state=None):
@@ -101,40 +94,6 @@ def decrypt(encrypted, x0, mode, x1=None):
     for num in encrypted:
         state = 3.99999 * state * (1 - state)
         state = (state + x0) % 1.0
-
-
-@app.route('/file-encrypt', methods=['GET', 'POST'])
-def file_encrypt():
-    if request.method == 'POST':
-        if 'file' not in request.files:
-            return render_template('file_encrypt.html', error="No file selected")
-        
-        file = request.files['file']
-        if file.filename == '':
-            return render_template('file_encrypt.html', error="No file selected")
-
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
-
-        with open(filepath, 'rb') as f:
-            content = f.read()
-        
-        mode = request.form['mode']
-        seed1 = float(request.form['seed1'])
-        seed2 = float(request.form['seed2']) if mode == "double" else None
-        
-        encrypted_bytes = encrypt(content.decode('latin1'), seed1, mode, seed2)
-        
-        encrypted_filepath = filepath + '.encrypted'
-        with open(encrypted_filepath, 'wb') as f:
-            f.write(bytes(encrypted_bytes))
-        
-        os.remove(filepath)  # Clean up original file
-        return send_file(encrypted_filepath, as_attachment=True)
-        
-    return render_template('file_encrypt.html')
-
         chaos = int(state * 1000) % 256
         decrypted_char = (num - chaos) % 256
         decrypted += chr(decrypted_char)
