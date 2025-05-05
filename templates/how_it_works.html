@@ -118,7 +118,7 @@
             const rValues = [];
             const xValues = [];
             
-            for(let r = 2.5; r <= 4; r += (1.5/points)) {
+            for(let r = 2.8; r <= 3.57; r += (0.77/points)) {
                 let x = 0.5;
                 
                 // Warm up
@@ -162,9 +162,16 @@
                 };
 
                 const layout = {
-                    title: 'Bifurcation Diagram of Logistic Map',
-                    xaxis: { title: 'r parameter' },
-                    yaxis: { title: 'Stable points' },
+                    title: 'Period-Doubling Cascade in Logistic Map',
+                    xaxis: { 
+                        title: 'r parameter',
+                        tickformat: '.2f',
+                        dtick: 0.1
+                    },
+                    yaxis: { 
+                        title: 'Stable points',
+                        range: [0, 1]
+                    },
                     plot_bgcolor: '#333',
                     paper_bgcolor: '#333',
                     font: { color: '#fff' },
