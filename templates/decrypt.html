@@ -120,7 +120,15 @@
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body class="animated-bg">
+<body>
+    <nav class="nav">
+        <div class="logo">CHAOSCRYPT</div>
+        <div class="nav-links">
+            <a href="/encrypt">Encrypt</a>
+            <a href="/decrypt">Decrypt</a>
+            <a href="/how-it-works">Learn More</a>
+        </div>
+    </nav>
     <div class="container">
         <h1>Decryption</h1>
         <form method="POST">
