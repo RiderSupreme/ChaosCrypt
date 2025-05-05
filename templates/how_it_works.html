@@ -166,17 +166,22 @@
 
             const layout = {
                 title: 'Interactive Logistic Map',
+                width: 800,
+                height: 500,
+                margin: {l: 50, r: 50, t: 50, b: 50},
                 xaxis: { 
                     title: 'x_n',
                     range: [0, 1],
                     gridcolor: '#444',
-                    zerolinecolor: '#666'
+                    zerolinecolor: '#666',
+                    tickformat: '.2f'
                 },
                 yaxis: { 
                     title: 'x_{n+1}',
                     range: [0, 1],
                     gridcolor: '#444',
-                    zerolinecolor: '#666'
+                    zerolinecolor: '#666',
+                    tickformat: '.2f'
                 },
                 plot_bgcolor: '#333',
                 paper_bgcolor: '#333',
@@ -261,13 +266,20 @@
 
             const layout = {
                 title: 'Interactive Bifurcation Diagram',
+                width: 800,
+                height: 500,
+                margin: {l: 50, r: 50, t: 50, b: 50},
                 xaxis: { 
                     title: 'r parameter',
-                    range: [2.8, 4]
+                    range: [2.8, 4],
+                    tickformat: '.2f',
+                    dtick: 0.2
                 },
                 yaxis: { 
                     title: 'x values',
-                    range: [0, 1]
+                    range: [0, 1],
+                    tickformat: '.2f',
+                    dtick: 0.1
                 },
                 plot_bgcolor: '#333',
                 paper_bgcolor: '#333',
@@ -317,13 +329,20 @@
 
             const layout = {
                 title: 'Interactive Sensitivity Analysis',
+                width: 800,
+                height: 500,
+                margin: {l: 50, r: 50, t: 50, b: 50},
                 xaxis: {
                     title: 'Iteration',
-                    gridcolor: '#444'
+                    gridcolor: '#444',
+                    dtick: 5
                 },
                 yaxis: {
                     title: 'Value',
-                    gridcolor: '#444'
+                    gridcolor: '#444',
+                    range: [0, 1],
+                    tickformat: '.2f',
+                    dtick: 0.1
                 },
                 plot_bgcolor: '#333',
                 paper_bgcolor: '#333',
