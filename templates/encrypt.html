@@ -124,7 +124,10 @@
         }
     </style>
 </head>
-<body>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="animated-bg">
     <div class="container">
         <h1>Encryption</h1>
         <form method="POST">
