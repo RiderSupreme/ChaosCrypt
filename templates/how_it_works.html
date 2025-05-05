@@ -140,9 +140,24 @@
                 name: 'Logistic Map',
                 line: {
                     color: '#ff3366',
-                    width: 2
+                    width: 3,
+                    dash: 'solid'
                 }
             };
+
+            // Add rainbow trail effect
+            const trailPoints = 10;
+            const trails = Array.from({length: trailPoints}, (_, i) => ({
+                x: [0.2],
+                y: [r * 0.2 * (1 - 0.2)],
+                mode: 'markers',
+                showlegend: false,
+                marker: {
+                    size: 8 - (i * 0.7),
+                    color: `hsl(${(i * 360/trailPoints)}, 80%, 60%)`,
+                    opacity: 1 - (i * 0.8/trailPoints)
+                }
+            }));
 
             const identityLine = {
                 x: [0, 1],
@@ -211,22 +226,29 @@
                 }]
             };
 
-            Plotly.newPlot('logisticPlot', [trace1, identityLine, currentPoint], layout);
+            Plotly.newPlot('logisticPlot', [trace1, identityLine, currentPoint, ...trails], layout);
 
             let x_n = 0.2;
             function animate() {
                 x_n = r * x_n * (1 - x_n);
-                const update = {
-                    x: [[x_n]],
-                    y: [[r * x_n * (1 - x_n)]]
-                };
+                const newX = x_n;
+                const newY = r * x_n * (1 - x_n);
+                
+                // Update main point and trails
+                const updates = trails.map((_, i) => ({
+                    x: [[i === 0 ? newX : trails[i-1].x[0]]],
+                    y: [[i === 0 ? newY : trails[i-1].y[0]]]
+                }));
+                
+                updates.unshift({}, {}, {x: [[newX]], y: [[newY]]});
+                
                 Plotly.animate('logisticPlot', {
-                    data: [{}, {}, update],
-                    traces: [2],
+                    data: updates,
+                    traces: Array.from({length: updates.length}, (_, i) => i),
                     layout: {}
                 }, {
                     transition: {duration: 0},
-                    frame: {duration: 50}
+                    frame: {duration: 30}
                 });
                 requestAnimationFrame(animate);
             }
