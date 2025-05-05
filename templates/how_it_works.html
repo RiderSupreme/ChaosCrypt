@@ -126,8 +126,11 @@
                     x = r * x * (1 - x);
                 }
                 
+                // Adaptive sampling based on r value
+                const localIterations = r > 3.57 ? Math.floor(iterations * 0.3) : iterations;
+                
                 // Collect points
-                for(let i = 0; i < iterations; i++) {
+                for(let i = 0; i < localIterations; i++) {
                     x = r * x * (1 - x);
                     rValues.push(r);
                     xValues.push(x);
