@@ -228,9 +228,25 @@
         const trace1 = {
             x: x1,
             y: y1,
-            mode: 'markers',
-            name: 'x0 = 0.2',
-            marker: { size: 3 }
+            mode: 'lines',
+            name: 'Logistic Map',
+            line: {
+                color: '#ff3366',
+                width: 2
+            }
+        };
+
+        // Add the y=x line for reference
+        const identityLine = {
+            x: [0, 1],
+            y: [0, 1],
+            mode: 'lines',
+            name: 'y = x',
+            line: {
+                color: '#666',
+                width: 1,
+                dash: 'dash'
+            }
         };
 
         const layout1 = {
@@ -250,7 +266,7 @@
                     font: { color: '#fff' }
                 };
 
-        Plotly.newPlot('logisticPlot', [trace1], layout1);
+        Plotly.newPlot('logisticPlot', [trace1, identityLine], layout1);
 
         // Plot sensitivity demonstration
         const [x2, y2] = generateLogisticData(0.2, 50);
@@ -259,13 +275,21 @@
         const trace2 = {
             y: y2,
             mode: 'lines',
-            name: 'x0 = 0.2'
+            name: 'x0 = 0.2',
+            line: {
+                color: '#ff3366',
+                width: 2
+            }
         };
 
         const trace3 = {
             y: y3,
             mode: 'lines',
-            name: 'x0 = 0.201'
+            name: 'x0 = 0.201',
+            line: {
+                color: '#2ecc71',
+                width: 2
+            }
         };
 
         const layout2 = {
