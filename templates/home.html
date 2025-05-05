@@ -177,12 +177,11 @@
 
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
         const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.005,
-            color: '#00ff88',
+            size: 0.008,
+            color: '#ff3366',
             sizeAttenuation: true,
             transparent: true,
-            opacity: 0.6,
-            blending: THREE.AdditiveBlending
+            opacity: 0.8
         });
 
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
