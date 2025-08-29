@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
+
 # Optimized Python functions
 def logistic_map(x0, n, prev_state=None):
     """Optimized logistic map that can continue from a previous state"""
@@ -21,6 +22,7 @@ def logistic_map(x0, n, prev_state=None):
     x = (x + x0) % 1.0
 
     return x
+
 
 def encrypt(message, x0, mode, x1=None):
     """Optimized encryption that avoids recalculating the sequence for each character"""
@@ -62,6 +64,7 @@ def encrypt(message, x0, mode, x1=None):
 
     return encrypted
 
+
 def decrypt(encrypted, x0, mode, x1=None):
     """Optimized decryption that matches the optimized encryption"""
     if mode == "double":
@@ -100,17 +103,21 @@ def decrypt(encrypted, x0, mode, x1=None):
 
     return decrypted
 
+
 @app.route('/')
 def home():
     return render_template('home.html')
+
 
 @app.route('/how-it-works')
 def how_it_works():
     return render_template('how_it_works.html')
 
+
 @app.route('/credits')
 def credits():
     return render_template('credits.html')
+
 
 @app.route('/encrypt', methods=['GET', 'POST'])
 def encrypt_page():
@@ -120,23 +127,29 @@ def encrypt_page():
         seed1 = float(request.form['seed1'])
         seed2 = float(request.form['seed2']) if mode == "double" else None
         encrypted = encrypt(message, seed1, mode, seed2)
-        return render_template('encrypt.html', result=f"Encrypted message: {encrypted}")
+        return render_template('encrypt.html',
+                               result=f"Encrypted message: {encrypted}")
     return render_template('encrypt.html')
+
 
 @app.route('/decrypt', methods=['GET', 'POST'])
 def decrypt_page():
     if request.method == 'POST':
         try:
             encrypted_str = request.form['encrypted']
-            encrypted_list = [int(x.strip()) for x in encrypted_str.strip('[]').split(',')]
+            encrypted_list = [
+                int(x.strip()) for x in encrypted_str.strip('[]').split(',')
+            ]
             mode = request.form['mode']
             seed1 = float(request.form['seed1'])
             seed2 = float(request.form['seed2']) if mode == "double" else None
             decrypted = decrypt(encrypted_list, seed1, mode, seed2)
-            return render_template('decrypt.html', result=f"Decrypted message: {decrypted}")
+            return render_template('decrypt.html',
+                                   result=f"Decrypted message: {decrypted}")
         except Exception as e:
             return render_template('decrypt.html', result=f"Error: {str(e)}")
     return render_template('decrypt.html')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

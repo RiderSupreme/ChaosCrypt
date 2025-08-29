@@ -1,124 +1,327 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Decryption - Chaos-Based Cryptography</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChaosEncrypt - Decryption</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #7928ca;
+            --primary-dark: #6017a9;
+            --secondary: #ff0080;
+            --text: #f0f0f0;
+            --background-dark: #0a0a18;
+            --card-bg: rgba(32, 32, 48, 0.85);
+            --input-bg: rgba(26, 26, 38, 0.8);
+            --success: #2ecc71;
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             background: linear-gradient(-45deg, #0f0f1a, #1a1a2e, #2a1a3a, #1a2a3e);
             background-size: 400% 400%;
             animation: gradient 15s ease infinite;
-            color: #eee;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
         }
 
         @keyframes gradient {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
-        .container {
-            background: rgba(51, 51, 51, 0.8);
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background: rgba(10, 10, 24, 0.8);
             backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(255,0,0,0.1);
-            max-width: 700px;
-            width: 95%;
-            margin: 0 auto;
-            border: 1px solid #555;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
-        @media (min-width: 768px) {
-            .container {
-                padding: 40px;
-                width: 90%;
-            }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
         }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.3rem 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 90%;
+            margin: 2rem auto;
+            border: 1px solid rgba(121, 40, 202, 0.3);
+            flex: 1;
+        }
+
         h1 {
-            color: #ff4d4d;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.2em;
+            margin-bottom: 2rem;
+            font-size: 2.4rem;
+            letter-spacing: 1px;
         }
+
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 1.8rem;
         }
+
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #ff4d4d;
+            margin-bottom: 0.5rem;
+            color: var(--text);
             font-weight: 500;
+            font-size: 1.05rem;
         }
-        textarea, input[type="number"] {
+
+        textarea, input[type="number"], select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
-            box-sizing: box-sizing;
-            background-color: #1a1a1a;
-            color: #ffffff;
+            padding: 1rem;
+            border: 2px solid var(--primary);
+            border-radius: calc(var(--border-radius) - 4px);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background-color: var(--input-bg);
+            color: var(--text);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            resize: vertical;
         }
-        textarea:focus, input[type="number"]:focus {
+
+        textarea:focus, input[type="number"]:focus, select:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.2);
             outline: none;
-            border-color: #007bff;
+            transform: translateY(-2px);
         }
+
         .button-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 0.8rem;
+            margin-top: 2rem;
         }
+
         @media (min-width: 768px) {
+            .container {
+                padding: 2.5rem;
+            }
+
             .button-group {
                 flex-direction: row;
-                gap: 15px;
-                margin-top: 30px;
+                gap: 1rem;
             }
         }
+
         .button {
             flex: 1;
-            background: linear-gradient(45deg, #ff3366, #ff6b6b);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
-            padding: 12px 20px;
+            padding: 1rem;
             border: none;
-            border-radius: 10px;
+            border-radius: calc(var(--border-radius) - 6px);
             cursor: pointer;
             text-decoration: none;
             text-align: center;
-            font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            letter-spacing: 0.5px;
         }
+
         .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(121, 40, 202, 0.3);
         }
+
+        .button:active {
+            transform: translateY(-1px);
+        }
+
         .button.secondary {
-            background-color: #7f8c8d;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
+
+        .button.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
         .result {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #444;
-            border-radius: 10px;
-            border-left: 4px solid #2ecc71;
-            color: #eee;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: rgba(40, 40, 60, 0.7);
+            border-radius: calc(var(--border-radius) - 6px);
+            border-left: 4px solid var(--success);
+            position: relative;
+            overflow: hidden;
         }
+
+        .result::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(46, 204, 113, 0.05));
+            pointer-events: none;
+        }
+
         .result h3 {
-            color: #ff4d4d;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-top: 0;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        /* Modern form elements */
+        .mode-selector {
+            position: relative;
+            margin-bottom: 1.8rem;
+        }
+
+        .mode-selector label {
+            margin-bottom: 1rem;
+        }
+
+        .mode-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .mode-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .mode-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .mode-option label {
+            display: block;
+            padding: 1rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(121, 40, 202, 0.3);
+            border-radius: calc(var(--border-radius) - 6px);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mode-option input[type="radio"]:checked + label {
+            background: linear-gradient(45deg, rgba(121, 40, 202, 0.2), rgba(255, 0, 128, 0.2));
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.2);
+        }
+
+        .mode-option:hover label {
+            border-color: var(--secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group, .result {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: rgba(240, 240, 240, 0.7);
+        }
+
+        /* Additional responsiveness */
+        @media (max-width: 600px) {
+            .nav {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .mode-options {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
         }
     </style>
-</head>
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <nav class="nav">
@@ -130,45 +333,75 @@
             <a href="/credits">Credits</a>
         </div>
     </nav>
+
     <div class="container">
+        <!-- DECRYPTION PAGE -->
         <h1>Decryption</h1>
         <form method="POST">
             <div class="form-group">
-                <label>Encrypted Message (comma-separated numbers):</label>
-                <textarea name="encrypted" rows="4" required></textarea>
+                <label for="encrypted">Encrypted Message (comma-separated numbers):</label>
+                <textarea id="encrypted" name="encrypted" rows="4" placeholder="e.g., 123, 45, 678, 90..." required></textarea>
             </div>
+
+            <div class="mode-selector">
+                <label>Decryption Mode:</label>
+                <div class="mode-options">
+                    <div class="mode-option">
+                        <input type="radio" id="single" name="mode" value="single" checked>
+                        <label for="single">Single Decryption</label>
+                    </div>
+                    <div class="mode-option">
+                        <input type="radio" id="double" name="mode" value="double">
+                        <label for="double">Double Decryption</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="form-group">
-                <label>Mode:</label>
-                <select name="mode" style="width: 100%; padding: 12px; border: 2px solid #ff0000; border-radius: 10px; font-size: 16px; margin-bottom: 15px; background-color: #1a1a1a; color: #ffffff;">
-                    <option value="single">Single Encryption</option>
-                    <option value="double">Double Encryption</option>
-                </select>
+                <label for="seed1">First Seed (Number between 0 and 1):</label>
+                <input type="number" id="seed1" name="seed1" step="any" min="0" max="1" placeholder="e.g., 0.75163" required>
             </div>
-            <div class="form-group">
-                <label>First Seed (Any Rational Number Between 0 And 1):</label>
-                <input type="number" name="seed1" step="any" required>
-            </div>
+
             <div class="form-group" id="seed2Group" style="display: none;">
-                <label>Second Seed (Any Rational Number Between 0 And 1):</label>
-                <input type="number" name="seed2" step="any">
+                <label for="seed2">Second Seed (Number between 0 and 1):</label>
+                <input type="number" id="seed2" name="seed2" step="any" min="0" max="1" placeholder="e.g., 0.32941">
             </div>
-            <script>
-                document.querySelector('select[name="mode"]').addEventListener('change', function() {
-                    document.getElementById('seed2Group').style.display = 
-                        this.value === 'double' ? 'block' : 'none';
-                });
-            </script>
+
             <div class="button-group">
-                <button type="submit" class="button">Decrypt</button>
+                <button type="submit" class="button">Decrypt Message</button>
+                <a href="/encrypt" class="button">Switch to Encrypt</a>
                 <a href="/" class="button secondary">Back to Home</a>
             </div>
         </form>
+
         {% if result %}
         <div class="result">
-            <h3>Result:</h3>
+            <h3>Decrypted Result:</h3>
             <p>{{ result }}</p>
         </div>
         {% endif %}
     </div>
+
+    <script>
+        // Toggle second seed field based on decryption mode
+        document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('seed2Group').style.display = 
+                    this.value === 'double' ? 'block' : 'none';
+            });
+        });
+
+        // Add animation when form is submitted
+        const form = document.querySelector('form');
+        form.addEventListener('submit', () => {
+            document.querySelectorAll('.form-group').forEach((group, index) => {
+                group.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+
+    <footer>
+        &copy; 2025 ChaosCrypt • Secure Chaos-Based Cryptography
+    </footer>
 </body>
 </html>
